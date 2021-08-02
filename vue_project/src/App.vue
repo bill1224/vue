@@ -10,11 +10,11 @@
     <a v-for="menu in menus" :key="menu">
       {{ menu }}
     </a>
-  </div>
-  <div>
-    <img src="./assets/디지니랜드.jpg" alt="디지니랜드" class="room-img">
-    <h4 @click="modal_is_state=true">{{ products[0] }}</h4>
-    <p>50 만원</p>
+  </div>  
+  <!-- <div>
+    <img :src="products[0].image" alt="디지니랜드" class="room-img">
+    <h4 @click="modal_is_state=true">{{ products[0].title }}</h4>
+    <p>가격 : {{ products[0].price }}만원</p>
     <button @click="increase(0)">허위매물신고</button> <span>신고수 : {{ report_num[0] }} </span>
   </div>
   <div>
@@ -28,26 +28,28 @@
     <h4>{{ products[2] }}</h4>
     <p>70 만원</p>
     <button @click="increase(2)">허위매물신고</button> <span>신고수 : {{ report_num[2] }} </span>
-  </div> 
-
-  <!-- <div v-for="(product, i) in products" :key="i">
-    <h4>{{ product }}</h4>
-    <p>70 만원</p>
-    <button @click="increase(i)">허위매물신고</button> <span>신고수 : {{ report_num[i] }} </span>
   </div>  -->
 
+  <div v-for="(product, i) in products" :key="i">    
+    <img :src="product.image" class="room-img">
+    <h4>{{ product.title }}</h4>
+    <p>{{ product.price }}</p>
+    <p>{{ product.content }}</p>
+    <button @click="increase(i)">허위매물신고</button> <span>신고수 : {{ report_num[i] }} </span>
+  </div>   
 </template>
 
 <script>
+import data from './oneroom.js';
 
 export default {
   name: 'App',
   data(){
-    return { 
+    return {       
       modal_is_state: false,
-      report_num : [0, 0, 0],
+      report_num : [0, 0, 0, 0, 0, 0],
       menus : ['Home', 'Shop', 'About'],
-      products : ['역산동원룸', '천호동원룸', '마포구원룸'],      
+      products : data,  
     }
   },
   methods : {
