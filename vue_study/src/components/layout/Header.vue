@@ -8,6 +8,8 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item href="#">Link</b-nav-item>
+        <!-- 라우터로 이용하기 위해서는 href => to -->
+        <b-nav-item to="/board/free">자유게시판</b-nav-item>
         <b-nav-item href="#" disabled>Disabled</b-nav-item>
       </b-navbar-nav>
 

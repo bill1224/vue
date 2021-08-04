@@ -6,6 +6,7 @@ import Read from "./components/Read";
 import Create from "./components/Create";
 // import Update from "./components/Update";
 import Detail from "./components/Detail";
+import Board from "./components/Board";
 
 Vue.use(VueRouter);
 
@@ -38,6 +39,11 @@ const router = new VueRouter({
             name: "Detail",
             component: Detail
         },
+        {
+            path: '/board/free',
+            name: 'Board',
+            component: Board
+        }
 
     ]
 
