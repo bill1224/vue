@@ -23,6 +23,10 @@ export default {
     props: {
         contentId: Number,
         reloadComment: Function,
+        commentId: Number,
+        isSubComment: Boolean,
+        reloadSubComment: Function,
+        subCommentToggle: Function,
     },
     data() {        
         return {
@@ -42,6 +46,20 @@ export default {
                 updated_at: null
             })
             this.reloadComment();
+            this.context = "";
+        },
+
+        createSubComment() {
+            data.SubComment.push({
+                subcomment_id: data.SubComment[data.SubComment.length - 1].subcomment_id + 1,
+                user_id: 1,
+                comment_id: this.commentId,
+                context: this.context,
+                created_at: '2021-08-06 02:22:22',
+                updated_at: null
+            })
+            this.subCommentToggle();
+            this.reloadSubComment();
             this.context = "";
         }
     }

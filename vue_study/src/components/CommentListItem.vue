@@ -2,7 +2,7 @@
     <div>        
         <div>
             <div class="comment-list-item-name">
-                <div>{{ name }}</div>
+                <div>{{ user_name }}</div>
                 <div>{{ commentObj.created_at }}</div>
             </div>
             <div class="comment-list-item-context">{{ commentObj.context }}</div>
@@ -10,25 +10,60 @@
             <div class="comment-list-item-button">
                 <b-button variant="info">수정</b-button>
                 <b-button variant="info">삭제</b-button>
+                <b-button variant="info" @click="subCommentToggle">댓글 달기</b-button>
             </div>
         </div>
+        <template v-if="subCommentCreateToggle">
+            <CommentCreate :isSubComment=true :commentId="commentObj.comment_id" :reloadSubComment="reloadSubComment" :subCommentToggle="subCommentToggle"/>
+        </template>      
+        <template v-if="subCommentList.length > 0">
+            <div v-for="(subComment, i) in subCommentList" :key="i">
+                <div class="comment-list-item-name">
+                    <div>{{ subComment.user_name }}</div>
+                    <div>{{ subComment.created_at }}</div>
+                </div>
+                <div class="comment-list-item-context">{{ subComment.context }}</div>
+
+                <div class="comment-list-item-button">
+                    <b-button variant="info">수정</b-button>
+                    <b-button variant="info" @click="delteSubComment">삭제</b-button>
+                </div>
+            </div>
+        </template>        
     </div>
 </template>
 
 <script>
 import data from '@/data';
+import CommentCreate from './CommentCreate';
 
 export default {
     name: 'CommentListItem',
     props: {
         commentObj: Object,
     },
-    data() {
-        const user_id = this.commentObj.user_id
-        const user_name = data.User.filter(user => user.user_id === user_id)[0].name
-        return { 
-            name: user_name,
+    components: {
+        CommentCreate,
+    },
+    data() {              
+        return {         
+            user_name: data.User.filter(user => user.user_id === this.commentObj.user_id)[0].name,            
+            subCommentList: data.SubComment.filter(item => item.comment_id === this.commentObj.comment_id)
+            .map(subCommentItem => ({...subCommentItem, user_name: data.User.filter(item => item.user_id === subCommentItem.user_id)[0].name})),
+            subCommentCreateToggle: false,
         }
+    },
+    methods: {
+        subCommentToggle() {
+            this.subCommentCreateToggle = !this.subCommentCreateToggle;
+        },
+        reloadSubComment() {
+            this.subCommentList = data.SubComment.filter(item => item.comment_id === this.commentObj.comment_id)
+            .map(subCommentItem => ({...subCommentItem, user_name: data.User.filter(item => item.user_id === subCommentItem.user_id)[0].name}))
+        },
+        // delteSubComment() {
+
+        // }
     }
 }
 </script>
