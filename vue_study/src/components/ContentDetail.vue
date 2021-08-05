@@ -4,7 +4,7 @@
             <div class="content-detail-content-info">
                 <div class="content-detail-content-info-left">
                     <div class="content-detail-content-info-left-number">
-                        ?{{ contentId }}
+                        {{ contentId }}
                     </div>
                     <div class="content-detail-content-info-left-subject">
                         {{ title }}
@@ -23,7 +23,7 @@
                 {{ context }}
             </div>
             <div class="content-detail-button">
-                <b-button variant="primary">수정</b-button>
+                <b-button variant="primary" @click="updateContent">수정</b-button>
                 <b-button variant="primary" @click="deleteData">삭제</b-button>
             </div>
             <div class="content-detail-content">
@@ -56,6 +56,15 @@ export default {
             data.Content.splice(content_index, 1)
             this.$router.push({
                 path:"/board/free",
+            })
+        },
+        updateContent() {
+            this.$router.push({
+                // path: `/board/free/create/${this.contentId}`
+                name: 'Create',
+                params: {
+                    contentId: this.contentId
+                } 
             })
         }
     }

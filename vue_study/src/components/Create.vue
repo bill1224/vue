@@ -1,43 +1,65 @@
 <template>
     <div>
-        <input type="text" placeholder="글쓴이" v-model="writer" />
-        <input type="text" placeholder="제목" v-model="title"/>
-        <textarea name="" id="" cols="30" rows="10" placeholder="내용" v-model="content"></textarea>
-        <button @click="index !== undefined ? update() : write()">{{ index !== undefined ? "수정" : "작성" }}</button>
+        <b-input v-model="subject" placeholder="제목을 입력해주세요."></b-input>
+        <b-form-textarea v-model="context" placeholder="내용을 입력해주세요"></b-form-textarea>
+        <b-button @click="updateMode ? updateContent() : uploadContent() ">{{ updateMode ? "수정" : "작성" }}</b-button>
+        <b-button @click="cancle">취소</b-button>
     </div>
 </template>
 
 <script>
-import data from '@/data'
+import data from '@/data';
+
 export default {
     name: 'Create',
-    data() {
-        const index = this.$route.params.contentId;
-        return {
-            data: data,
-            index: index,
-            writer: index !== undefined ? data[index].writer : "", 
-            title: index !== undefined ? data[index].title : "",
-            content: index !== undefined ? data[index].content : "",
-        }
+    
+    data() {        
+        return {                    
+            subject: '',
+            context: '',
+            user_id: 1,
+            createdAt: '2021-08-05 21:07:33',
+            updatedAt: null,
+            updateMode: Number(this.$route.params.contentId) > 0 ? true : false,
+        }        
     },
+    created() {
+        if (Number(this.$route.params.contentId) > 0){
+            const contentId = Number(this.$route.params.contentId)
+            const contentData = data.Content.filter(content => content.content_id === contentId)[0]
+            this.subject = contentData.title
+            this.context = contentData.context
+        }        
+    },
+
     methods: {
-        write() {
-            this.data.push({
-                writer: this.writer,
-                title: this.title,
-                content: this.content
-            })
+        cancle() {
             this.$router.push({
-                path:"/"
+                path: "/board/free"
             })
         },
-        update() {
-            data[this.index].writer = this.writer
-            data[this.index].title = this.title
-            data[this.index].content = this.content
+        uploadContent() {
+            let item = data.Content.sort((a,b) => {return b.content_id - a.content_id})[0].content_id
+            const content_id = item + 1
+            data.Content.push({
+                content_id: content_id,
+                user_id: this.user_id,
+                title: this.subject,
+                context: this.context,
+                created_at: this.createdAt,
+                updated_at: this.updatedAt,
+            })
             this.$router.push({
-                path:"/"
+                path: "/board/free"
+            })
+        },
+        updateContent() {            
+            const contentId = Number(this.$route.params.contentId)
+            const contentData = data.Content.filter(content => content.content_id === contentId)[0]
+            contentData.title = this.subject
+            contentData.context = this.context
+            this.$router.push({
+                path: `/board/free/detail/${contentId}`
             })
         }
     }

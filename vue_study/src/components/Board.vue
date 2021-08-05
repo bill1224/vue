@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-table striped hover :items="items" :fields="fields" @row-clicked="rowClick"></b-table>
+    <b-button @click="writeContent">글쓰기</b-button>
   </div>
 </template>
 
@@ -51,6 +52,11 @@ import data from "@/data";
             this.$router.push({
                 path: `/board/free/detail/${item.content_id}`
             })
+        },
+        writeContent() {
+          this.$router.push({
+            path: "/board/free/create"
+          })
         }
 
     }
