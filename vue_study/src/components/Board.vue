@@ -1,6 +1,24 @@
 <template>
-  <div>
-    <b-table striped hover :items="items" :fields="fields" @row-clicked="rowClick"></b-table>
+  <div class="overflow-auto">
+    <b-table
+      id="my-table"
+      striped hover
+      :items="items"
+      :fields="fields"
+      @row-clicked="rowClick"
+      :per-page="perPage"
+      :current-page="currentPage"
+      small
+    ></b-table>
+
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="rows"
+      :per-page="perPage"
+      aria-controls="my-table"
+      align="center"
+    ></b-pagination>
+    
     <b-button @click="writeContent">글쓰기</b-button>
   </div>
 </template>
@@ -44,7 +62,14 @@ import data from "@/data";
                   label: '글쓴이'
               },
           ],
-          items: items    
+          items: items,
+          perPage: 5,
+          currentPage: 1,
+      }
+    },
+    computed: {
+      rows() {
+        return this.items.length
       }
     },
     methods: {
