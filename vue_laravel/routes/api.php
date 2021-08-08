@@ -52,3 +52,13 @@ Route::post('/login', function(Request $request) {
     //토큰 반환
     return $user->createToken($request->device_name)->plainTextToken;
 });
+
+//로그아웃 처리
+Route::middleware('auth:sanctum')
+    ->post('/logout', function(Request $request){
+
+        //현재 모든 사용자의 모든 토큰을 만료시킴
+        $request->user()->tokens()->delete();
+        return response('토큰만료 성공', 200)
+            ->header('Content-Type', 'text/plain');
+    });
