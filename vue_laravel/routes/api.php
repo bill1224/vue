@@ -62,3 +62,13 @@ Route::middleware('auth:sanctum')
         return response('토큰만료 성공', 200)
             ->header('Content-Type', 'text/plain');
     });
+
+
+//API 리소스 라우트
+Route::apiResource('photos', PhotoController::class);
+
+//apiResources 메소드에 배열형태의 API 리소스 컨트롤러를 전달하여 여러개를 한번에 등록할 수 있습니다.
+Route::apiResources([
+    'photos' => PhotoController::class,
+    'posts' => PostController::class,
+]);

@@ -2,8 +2,10 @@
 
 use App\Models\User;
 use Inertia\Inertia;
+use App\Http\Controllers\ShowProfile;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -227,3 +229,90 @@ Route::middleware(['web', 'subscribed'])->group(function () {
 Route::put('post/{id}', function ($id) {
     //
 })->middleware('role:editor'); //":"로 구분한다.  middleware(미들웨어 이름 : 인자)
+
+
+
+//컨트롤러
+//컨트롤러는 기본 클래스를 확장하기 위해 필수가 아닙니다. 
+//그러나 middleware, validate, dispatch 함수와 같은 편리한 기능을 사용할 수는 없습니다.
+Route::get('user/{id}', [UserController::class, 'show']);
+
+
+//단일 동작 컨트롤러
+//단일 액션 컨트롤러에 대한 경로를 등록할 때 함수를 지정할 필요가 없다. 
+Route::get('user/{id}', ShowProfile::class);
+
+//컨트롤러에서 미들웨어 지정
+
+
+
+//리소스 컨트롤러
+//php artisan make:controller PhotoController --resource 명령어를 사용하면,
+//컨트롤러를 생성할 때, CRUD에 필요한 함수의 틀을 자동적으로 생성해준다.
+
+//resource를 사용하면, 한번의 선언만으로 photo 를 구성하는 RESTful 한 액션에 대한 다양한 라우트를 설정할 수 있습니다.
+Route::resource('photos', PhotoController::class);
+
+//배열을 사용해서, 여러개의 리소스 컨트롤러를 등록할 수 있다.
+Route::resources([
+    'photos' => PhotoController::class,
+    'posts' => PostController::class,
+]);
+
+//액션의 일부만 지정해줄 수도 있다.
+Route::resource('photos', PhotoController::class)->except([
+    'create', 'store', 'update', 'destroy'
+]);
+
+//중첩된 리소스
+// /때때로 중첩 된 리소스에 대한 라우트를 정의해야 할 수도 있습니다. 
+//예를 들어, 사진 리소스는 사진에 첨부 될 수있는 다수의 코멘트를 가질 수 있습니다. 
+//리소스 컨트롤러를 중첩하려면 경로 선언에서 "점-dot"표기법을 사용하십시오.
+Route::resource('photos.comments', PhotoCommentController::class);
+
+// 위의 라우트는 /photos/{photo}/comments/{comment} URL로 접근할 수 있는 중첩된 리소스 제공
+
+//scoped 메서드를 사용해 중첩 된 리소스를 정의 할 때 자동 범위 지정을 활성화 할 수있을뿐만 아니라
+//Laravel에 하위 리소스를 검색해야하는 필드를 지정할 수 있습니다.
+Route::resource('photos.comments', PhotoCommentController::class)->scoped([
+    'comment' => 'slug',
+]);
+
+//이 라우트는 다음과 같은 URI로 접근해 중첩된 리소스의 범위를 지정 등록할 수 있습니다.
+// /photos/{photo}/comments/{comment:slug}
+
+
+//얕은 중첩
+//자식 ID는 이미 고유 식별자이므로 URI 내에 부모 ID와 자식 ID를 모두 가질 필요는 없습니다. 
+Route::resource('photos.comments', CommentController::class)->shallow();
+
+//리소스 라우트 이름 지정하기
+//기본적으로 모든 리소스 컨트롤러 액션은 라우트 이름을 가지고 있습니다. 그러나 names 옵션 배열을 전달하여 이름을 덮어씌울 수 있습니다.
+Route::resource('photos', PhotoController::class)->names([
+    'create' => 'photos.build'
+]);
+
+//리소스 라우트 파리미터 이름 지정하기
+Route::resource('users', AdminUserController::class)->parameters([
+    'users' => 'admin_user'
+]);
+
+//위의 예제는  /users/{admin_user}
+
+//Resource 컨트롤러 라우트에 추가하기
+//만약 리소스 컨트롤러에 추가적으로 라우팅을 구성해야할 필요가 있다면
+// Route::resource가 호출되기 전에 등록해야합니다. 그렇지 않으면 resource 메소드에
+// 의해서 정의된 라우트들이 추가한 라우트들 보다 우선하게 되어 버립니다.
+Route::get('photos/popular', [PhotoController::class, 'popular']);
+Route::resource('photos', PhotoController::class);
+
+//라우트 캐시
+//컨트롤러 기반의 라우드만을 사용할 경우, 라이트 캐시를 사용하게되면, 
+//라우트등록이 100배 빨라질 수도 있다.
+// php artisan route:cache 명령어 사용
+//이 명령을 실행하면 캐시 된 라우트 파일이 모든 요청에 로드됩니다. 
+//새로운 라우트를 추가하는 경우 새로운 라우트 캐시를 생성해야합니다. 
+//이 때문에 프로젝트 배포 중에 route:cache 명령 만 실행하면 됩니다.
+
+//캐시를 재생성하는것 말고 캐시를 제거하기 위해서는 route:clear 명령어를 실행하면 됩니다.
+//php artisan route:clear
