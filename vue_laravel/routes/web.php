@@ -165,8 +165,65 @@ Route::fallback(function() {
 //게스트 사용자와 인증된 사용자를 다른 Rate로 제한해줄 수 있다.
 // "|" 를 기준으로 왼쪽은 게스트 Rate, 오른쪽은 인증된 사용자의 Rate
 // "throttle:10|60. 1"은 1분동안 게스트는 10개의 Rate, 인증된 사용자는 60개의 Rate라는 의미
-Route::middleware('throttle:5|60,1')->group(function () {
-    Route::get('/test', function() {
-        return "throttle 5번 제한";
+// Route::middleware('throttle:5|60,1')->group(function () {
+//     Route::get('/test', function() {
+//         return "throttle 5번 제한";
+//     });
+// });
+
+
+
+//미들웨어
+//미들웨어는 HTTP요총이 애플리케이션에 도달하기 전에 반드시 통과해야하는 일종의 단계이다.
+// HTTP요청을 미들웨어 처리전에 실행할지, 처리후에 실행할지는 미들웨어에서 결정할 수 있다
+
+//app/Http/Kernel.php에서 전역 미들웨어를 설정해 줄 수 있다.
+
+Route::get('admin/profile', function () {
+    //
+})->middleware('auth'); // auth는 Kernel.php에서 지정해놓은 이름이다.
+//지정해놓은 이름을 사용하지 않고, 전체 클레스 이름으로도 전달가능 ex) middelware(CheckAge::class);
+
+//그룹을 통해서 미들웨어를 적용할 수 도 있고 
+Route::middleware([CheckAge::class])->group(function () {
+    Route::get('/', function () {
+        //
     });
+
+    Route::get('admin/profile', function () {
+        //
+    })->withoutMiddleware([CheckAge::class]); //그룹내에 미들웨어를 적용시키면 안되는 부분은 withoutMiddelware 사용
 });
+
+//Kernel.php에는 middlewareGroups라고 정의되어있어, 그곳에서 하나의 미들웨어 이름으로 다양한 미들웨어를 적용가능
+// 'web' => [
+//         \App\Http\Middleware\EncryptCookies::class,
+//         \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+//         \Illuminate\Session\Middleware\StartSession::class,
+//         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+//         \App\Http\Middleware\VerifyCsrfToken::class,
+//         \Illuminate\Routing\Middleware\SubstituteBindings::class,
+//     ],
+//web이라는 이름으로 다양한 미들웨어를 적용한것을 볼 수 있다. 
+
+Route::get('/', function () {
+    //
+})->middleware('web');
+
+Route::group(['middleware' => ['web']], function () {
+    //
+});
+
+Route::middleware(['web', 'subscribed'])->group(function () {
+    //
+});
+
+
+//미들웨어 순서
+//Kernel.php에서 middlewarePriority속성을 사용하여 우선순위를 지정 가능하다. 
+
+
+//미들웨어 인자
+Route::put('post/{id}', function ($id) {
+    //
+})->middleware('role:editor'); //":"로 구분한다.  middleware(미들웨어 이름 : 인자)

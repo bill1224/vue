@@ -64,4 +64,14 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
+
+    //미들웨어의 우선순위를 지정해줄 수 있다.
+    // protected $middlewarePriority = [
+    // \Illuminate\Session\Middleware\StartSession::class,
+    // \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+    // \App\Http\Middleware\Authenticate::class,
+    // \Illuminate\Session\Middleware\AuthenticateSession::class,
+    // \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    // \Illuminate\Auth\Middleware\Authorize::class,
+    // ];
 }
