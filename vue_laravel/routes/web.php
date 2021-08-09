@@ -138,11 +138,35 @@ Route::get('routeName', function () {
 
 // request URI 로 부터 일치하는 ID 값을 가진 모델 인스턴스를 주입할것입니다. 
 //만약 데이터베이스에서 매칭되는 모델 인스턴스를 찾을 수 없으면, 자동으로 404 HTTP response 가 생성됩니다.
-Route::get('users/{user}', function (User $user) {
-    return $user->email;
-});
+// Route::get('user/{name}', function (User $user) {
+//     return $user->email;
+// });
 
 //id값이 아니라 다른 컬럼으로 사용하길 원한다면, 지정해줄 수도 있다.
 Route::get('api/posts/{post:slug}', function (App\Post $post) {
     return $post;
+});
+
+//대체하는 라우트가 없을 때 실행할 라우트를 정의할 수 있다. 
+Route::fallback(function() {
+    return view('home');
+});
+
+
+// Request요청의 최대치를 정할 수 있다.
+//throttle() 를 사용해서 throttle(60, 1) -> 1분에 60개로 제한한다는 의미 
+////User 모델에 rate_limit라는 속성이 있으먄, thrpttle(rate_limit, 1)로 동적인 제한도 가능
+// Route::middleware('auth:api', 'throttle:3,1')->group(function () {
+//     Route::get('/user', function () {
+//         return view('home');
+//     });
+// });
+
+//게스트 사용자와 인증된 사용자를 다른 Rate로 제한해줄 수 있다.
+// "|" 를 기준으로 왼쪽은 게스트 Rate, 오른쪽은 인증된 사용자의 Rate
+// "throttle:10|60. 1"은 1분동안 게스트는 10개의 Rate, 인증된 사용자는 60개의 Rate라는 의미
+Route::middleware('throttle:5|60,1')->group(function () {
+    Route::get('/test', function() {
+        return "throttle 5번 제한";
+    });
 });
