@@ -2,10 +2,11 @@
 
 use App\Models\User;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 use App\Http\Controllers\HttpRequest;
 use App\Http\Controllers\ShowProfile;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Application; 
 use App\Http\Controllers\UserController;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -48,12 +49,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 // Route::redirect('/here', '/there', 301);
 
-Route::view('/home', 'home', ['name' => 'jongin']);
+// Route::view('/home', 'home', ['name' => 'jongin']);
 
-//필수 파라미터
-Route::get('/home/{id}', function(Request $request) {
-    return view('home', ['id' => $request->id]);
-});
+// //필수 파라미터
+// Route::get('/home/{id}', function(Request $request) {
+//     return view('home', ['id' => $request->id]);
+// });
 
 // Route::get('user/{id}', function ($id) {
 //     return 'User '.$id;
@@ -97,9 +98,9 @@ Route::get('/home/{id}', function(Request $request) {
 //route()함수에 파라미터도 같이 보낼 수 있으며, 배열형태로 여러개의 파라미터를 전달할 수도있다. 
 //이때, 기존 name()된 라우터에서 파라미터가 지정되어있지 않은  초과된 파라미터는 
 //URL에 쿼리문형태로 추가되어진다. /user/1/profile?photos=yes
-Route::get('routeName', function () {
-    return redirect()->route('profile', ['id' => 1, 'photos' => 'yes']);
-});
+// Route::get('routeName', function () {
+//     return redirect()->route('profile', ['id' => 1, 'photos' => 'yes']);
+// });
 
 //라우트 그룹
 //그룹을 사용하면, 라우트마다 미들웨어를 지정해주지 않아도 된다. 
@@ -147,14 +148,14 @@ Route::get('routeName', function () {
 // });
 
 //id값이 아니라 다른 컬럼으로 사용하길 원한다면, 지정해줄 수도 있다.
-Route::get('api/posts/{post:slug}', function (App\Post $post) {
-    return $post;
-});
+// Route::get('api/posts/{post:slug}', function (App\Post $post) {
+//     return $post;
+// });
 
 //대체하는 라우트가 없을 때 실행할 라우트를 정의할 수 있다. 
-Route::fallback(function() {
-    return view('home');
-});
+// Route::fallback(function() {
+//     return view('home');
+// });
 
 
 // Request요청의 최대치를 정할 수 있다.
@@ -210,17 +211,17 @@ Route::middleware([CheckAge::class])->group(function () {
 //     ],
 //web이라는 이름으로 다양한 미들웨어를 적용한것을 볼 수 있다. 
 
-Route::get('/', function () {
-    //
-})->middleware('web');
+// Route::get('/', function () {
+//     //
+// })->middleware('web');
 
-Route::group(['middleware' => ['web']], function () {
-    //
-});
+// Route::group(['middleware' => ['web']], function () {
+//     //
+// });
 
-Route::middleware(['web', 'subscribed'])->group(function () {
-    //
-});
+// Route::middleware(['web', 'subscribed'])->group(function () {
+//     //
+// });
 
 
 //미들웨어 순서
@@ -228,21 +229,21 @@ Route::middleware(['web', 'subscribed'])->group(function () {
 
 
 //미들웨어 인자
-Route::put('post/{id}', function ($id) {
-    //
-})->middleware('role:editor'); //":"로 구분한다.  middleware(미들웨어 이름 : 인자)
+// Route::put('post/{id}', function ($id) {
+//     //
+// })->middleware('role:editor'); //":"로 구분한다.  middleware(미들웨어 이름 : 인자)
 
 
 
 //컨트롤러
 //컨트롤러는 기본 클래스를 확장하기 위해 필수가 아닙니다. 
 //그러나 middleware, validate, dispatch 함수와 같은 편리한 기능을 사용할 수는 없습니다.
-Route::get('user/{id}', [UserController::class, 'show']);
+// Route::get('user/{id}', [UserController::class, 'show']);
 
 
 //단일 동작 컨트롤러
 //단일 액션 컨트롤러에 대한 경로를 등록할 때 함수를 지정할 필요가 없다. 
-Route::get('user/{id}', ShowProfile::class);
+// Route::get('user/{id}', ShowProfile::class);
 
 //컨트롤러에서 미들웨어 지정
 
@@ -253,32 +254,32 @@ Route::get('user/{id}', ShowProfile::class);
 //컨트롤러를 생성할 때, CRUD에 필요한 함수의 틀을 자동적으로 생성해준다.
 
 //resource를 사용하면, 한번의 선언만으로 photo 를 구성하는 RESTful 한 액션에 대한 다양한 라우트를 설정할 수 있습니다.
-Route::resource('photos', PhotoController::class);
+// Route::resource('photos', PhotoController::class);
 
 //배열을 사용해서, 여러개의 리소스 컨트롤러를 등록할 수 있다.
-Route::resources([
-    'photos' => PhotoController::class,
-    'posts' => PostController::class,
-]);
+// Route::resources([
+//     'photos' => PhotoController::class,
+//     'posts' => PostController::class,
+// ]);
 
 //액션의 일부만 지정해줄 수도 있다.
-Route::resource('photos', PhotoController::class)->except([
-    'create', 'store', 'update', 'destroy'
-]);
+// Route::resource('photos', PhotoController::class)->except([
+//     'create', 'store', 'update', 'destroy'
+// ]);
 
 //중첩된 리소스
 // /때때로 중첩 된 리소스에 대한 라우트를 정의해야 할 수도 있습니다. 
 //예를 들어, 사진 리소스는 사진에 첨부 될 수있는 다수의 코멘트를 가질 수 있습니다. 
 //리소스 컨트롤러를 중첩하려면 경로 선언에서 "점-dot"표기법을 사용하십시오.
-Route::resource('photos.comments', PhotoCommentController::class);
+// Route::resource('photos.comments', PhotoCommentController::class);
 
 // 위의 라우트는 /photos/{photo}/comments/{comment} URL로 접근할 수 있는 중첩된 리소스 제공
 
 //scoped 메서드를 사용해 중첩 된 리소스를 정의 할 때 자동 범위 지정을 활성화 할 수있을뿐만 아니라
 //Laravel에 하위 리소스를 검색해야하는 필드를 지정할 수 있습니다.
-Route::resource('photos.comments', PhotoCommentController::class)->scoped([
-    'comment' => 'slug',
-]);
+// Route::resource('photos.comments', PhotoCommentController::class)->scoped([
+//     'comment' => 'slug',
+// ]);
 
 //이 라우트는 다음과 같은 URI로 접근해 중첩된 리소스의 범위를 지정 등록할 수 있습니다.
 // /photos/{photo}/comments/{comment:slug}
@@ -286,13 +287,13 @@ Route::resource('photos.comments', PhotoCommentController::class)->scoped([
 
 //얕은 중첩
 //자식 ID는 이미 고유 식별자이므로 URI 내에 부모 ID와 자식 ID를 모두 가질 필요는 없습니다. 
-Route::resource('photos.comments', CommentController::class)->shallow();
+// Route::resource('photos.comments', CommentController::class)->shallow();
 
 //리소스 라우트 이름 지정하기
 //기본적으로 모든 리소스 컨트롤러 액션은 라우트 이름을 가지고 있습니다. 그러나 names 옵션 배열을 전달하여 이름을 덮어씌울 수 있습니다.
-Route::resource('photos', PhotoController::class)->names([
-    'create' => 'photos.build'
-]);
+// Route::resource('photos', PhotoController::class)->names([
+//     'create' => 'photos.build'
+// ]);
 
 //리소스 라우트 파리미터 이름 지정하기
 Route::resource('users', AdminUserController::class)->parameters([
@@ -343,5 +344,48 @@ Route::resource('photos', PhotoController::class);
 
 // Route::get('/http', [HttpRequest::class, 'onlyAndExcept']);
 
-Route::get('/http', [HttpRequest::class, 'has']);
+// Route::get('/http', [HttpRequest::class, 'has']);
 
+// Route::get('/http', [HttpRequest::class, 'cookie']);
+
+Route::post('/away', function () {
+    // Validate the request...
+
+    // return back()->withInput();
+    // //route 메소드를 사용할 수 있습니다.
+    // return redirect()->route('login');
+    // //라우트가 인자를 받아야 한다면, route 메소드의 두번째 인자로 이를 전달할 수 있습니다.
+    // return redirect()->route('profile', ['id' => 1]);
+    //Eloquent 모델에 의해서 채워지는 "ID" 파라미터를 가진 라우트로 리다이렉트 하는 경우, 
+    //모델 그 자체를 전달할 수 있습니다. ID 는 자동으로 추출됩니다.
+    // return redirect()->route('home', [$user]);
+
+    //또한 컨트롤러 액션으로 리다이렉트하는 응답을 생성할 수도 있습니다. 이렇게 하기 위해서는,
+    // 컨트롤러와 액션의 이름을 action 메소드에 전달하면 됩니다.
+    // return redirect()->action([HomeController::class, 'index']);
+    //컨트롤러 라우트에 파라미터가 필요한 경우, action 메소드의 두 번째 인자로 전달하면 됩니다.
+    // return redirect()->action(
+    //     [UserController::class, 'profile'], ['id' => 1]
+    // );
+
+    //때로는 애플리케이션의 외부 도메인으로 리다이렉트 해야 하기도 합니다. 
+    //추가적인 URL 인코딩, 유효성 검사와 확인 과정 없이 RedirectResponse을 만드는 away 메소드를 호출해서 이렇게 할 수 있습니다.
+    // return redirect()->back();
+
+    //away()를 이용해서 URL인토딩, 유효성 검사없이 외부 도메인으로 리다이렉트 
+    return redirect()->away('https://www.google.com');
+})->name('google');
+
+Route::get('/test', function(){
+    return view('test');
+});
+
+Route::get('/home', function () {
+    return view('home');
+});
+
+//성공 메세지를 세션에 임시 저장할 때 작업을 성공적으로 액션을 수행한 다음에 완료
+//인스턴스를 생성하고 데이터를 세션에 임시저장하는 유연한 메소드 체이닝을 할 수 있습니다.
+Route::post('user/status', function () {
+    return redirect('home')->with('status', 'Profile updated!');
+})->name('status');
