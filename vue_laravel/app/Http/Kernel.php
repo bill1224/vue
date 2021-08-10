@@ -21,6 +21,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\SetDefaultLocateForUrls::class,
     ];
 
     /**
@@ -62,16 +63,17 @@ class Kernel extends HttpKernel
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,        
     ];
 
     //미들웨어의 우선순위를 지정해줄 수 있다.
-    // protected $middlewarePriority = [
+    protected $middlewarePriority = [
+        \App\Http\Middleware\SetDefaultLocateForUrls::class,
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
     // \Illuminate\Session\Middleware\StartSession::class,
     // \Illuminate\View\Middleware\ShareErrorsFromSession::class,
     // \App\Http\Middleware\Authenticate::class,
     // \Illuminate\Session\Middleware\AuthenticateSession::class,
-    // \Illuminate\Routing\Middleware\SubstituteBindings::class,
-    // \Illuminate\Auth\Middleware\Authorize::class,
-    // ];
+        // \Illuminate\Auth\Middleware\Authorize::class,
+    ];
 }

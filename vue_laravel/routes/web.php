@@ -3,13 +3,14 @@
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 use App\Http\Controllers\HttpRequest;
 use App\Http\Controllers\ShowProfile;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application; 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use Psr\Http\Message\ServerRequestInterface;
-use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -424,3 +425,54 @@ Route::get('/view', function () {
 Route::get('/profile', function() {
     return view('profile');
 });
+
+
+Route::get('/test/{id?}', function () {
+    //
+})->name('unsubscribe');
+
+Route::get('/test/{post}/comment/{comment}', function () {
+    //
+})->name('comment.show');
+
+//유입되는 request-요청이 유효한 서명이 있는지 확인하기 위해서는 
+//유입되는 Request 에 hasValidSignature 메소드를 호출해야 합니다.
+Route::get('/unsubscribe/{user}', function (Request $request) {
+    if (! $request->hasValidSignature()) {
+        abort(401);
+    }
+
+    // ...
+})->name('unsubscribe');
+
+//또한 ValidateSignature(signed) 미들웨어를 사용하여 검사할 수도 있다.
+//유입되는 request-요청에 유효한 서명이 없다면, 
+//미들웨어는 자동으로 403 오류 response-응답을 반환합니다.
+Route::post('/unsubscribe/{user}', function (Request $request) {
+    // ...
+})->name('unsubscribe')->middleware('signed');
+
+
+Route::get('/action', function() {
+    $url = action([HomeController::class, 'index']);
+
+    return view('home', ['url' => $url]);
+});
+
+
+
+//몇몇 애플리케이션에서는 특정 URL 파라미터에 대해 요청-reqeust 전의 기본값을 지정할 수 있습니다.
+// 예를 들어, 다수의 라우트에서 {locale} 파라미터를 정의한다고 가정해보겠습니다
+Route::get('/{locate}/user', function () {
+    //
+})->name('user.index');
+
+//route 헬퍼를 호출할 때마다 locale 을 전달해야 하는 것은 번거로운 일일 수 있습니다. 
+//따라서 URL::defaults 메소드를 사용하여 현재 요청-request 중에서 항상 적용될 파라미터의 
+//기본값을 정의 할 수 있습니다. 라우트 미들웨어에서 이 메소드를 호출하여 현재의 요청-request에 엑
+//세스 할 수 있습니다.
+
+// 주의할점!! -> middleware에 URL::defaults 작성한뒤에 꼭, Kernel.php에서 전역 미들웨어에 등록하기
+//URL 기본값을 설정하면 라라벨의 묵시적 모델 바인딩 처리에 방해가 될 수 있습니다. 
+//따라서, 라라벨의 SubstituteBindings 미들웨어 이전에 URL 기본값을 설정한 미들웨어를 실행해야 합니다.
+// 애플리케이션 HTTP 커널의 $middlewarePriority 속성 내에서 SubstituteBindings 보다 먼저 등록되어야합니다.
