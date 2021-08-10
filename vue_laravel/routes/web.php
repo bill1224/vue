@@ -2,10 +2,12 @@
 
 use App\Models\User;
 use Inertia\Inertia;
+use App\Http\Controllers\HttpRequest;
 use App\Http\Controllers\ShowProfile;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\UserController;
+use Psr\Http\Message\ServerRequestInterface;
 
 /*
 |--------------------------------------------------------------------------
@@ -316,3 +318,30 @@ Route::resource('photos', PhotoController::class);
 
 //캐시를 재생성하는것 말고 캐시를 제거하기 위해서는 route:clear 명령어를 실행하면 됩니다.
 //php artisan route:clear
+
+
+//HTTP Request
+// Route::get('/http/aaa', [HttpRequest::class, 'path']);
+
+// Route::get('/http/aaa', [HttpRequest::class, 'path_is']);
+
+// Route::get('/http/aaa', [HttpRequest::class, 'url']);
+
+// Route::get('/http/aaa', [HttpRequest::class, 'method']);
+
+// Route::get('/http', function (ServerRequestInterface $request) {
+//     return $request;
+// });
+
+// Route::get('/http', [HttpRequest::class, 'all']);
+
+// Route::get('/http', [HttpRequest::class, 'input']);
+
+// Route::get('/http', [HttpRequest::class, 'query']);
+
+// Route::get('/http', [HttpRequest::class, 'boolean']);
+
+// Route::get('/http', [HttpRequest::class, 'onlyAndExcept']);
+
+Route::get('/http', [HttpRequest::class, 'has']);
+
