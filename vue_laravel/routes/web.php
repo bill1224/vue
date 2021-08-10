@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application; 
 use App\Http\Controllers\UserController;
 use Psr\Http\Message\ServerRequestInterface;
+use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -389,3 +390,37 @@ Route::get('/home', function () {
 Route::post('user/status', function () {
     return redirect('home')->with('status', 'Profile updated!');
 })->name('status');
+
+Route::get('/view', function () {
+    
+    //exist 메소드는 뷰 파일이 존재한다면 true 를 반환할 것입니다.
+    if (View::exists('emails.customer')) {
+        return view('home');
+    }
+
+    //first 메소드를 사용하면, 주어진 배열에 있는 뷰 중에서 
+    //사용가능한 처음의 뷰를 사용 할 수 있습니다. 
+    // return view()->first(['xxxx', 'test', 'home', 'bbbb']);
+    //View 파사드를 통해서도 이 메소드를 호출할 수 있습니다.
+    // return View::first(['custom.admin', 'admin'], $data);
+
+    //with 메소드를 사용하여 뷰에 전달할 데이터를 개별적으로 추가 할 수도 있습니다.
+    //아래의 코드와 똑같은 코드다 return view('home', ['name' => 'Victoria']);
+    return view('home')->with('name', 'Victoria');
+});
+
+//모든 뷰파일에서 데이터 공유하기
+//모든 뷰에서 데이터를 공유할 필요가 있을 수도 있습니다. 
+//여러분은 뷰 파사드의 share 메소드를 사용하면 됩니다.
+//AppServiceProvider.php의 boot()메소드에 구성해야한다. 
+// use Illuminate\Support\Facades\View;
+
+// public function boot()
+//     {
+//         View::share('key', 'value');
+//     }
+
+
+Route::get('/profile', function() {
+    return view('profile');
+});
