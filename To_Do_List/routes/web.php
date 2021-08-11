@@ -18,4 +18,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', [ToDoListController::class, 'index']);
+Route::get('/todo', [ToDoListController::class, 'index']);

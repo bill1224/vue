@@ -6,5 +6,3 @@ import TestFile from './components/TestFile.vue';
 const app = createApp({});
 app.component('test-file', TestFile)
     .mount('#app');
-
-require('./bootstrap');

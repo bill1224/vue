@@ -19,4 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/home', [ToDoListController::class, 'index']);
+Route::get('/todo', [ToDoListController::class, 'index']);
+
+Route::get('/todo/complete', [ToDoListController::class, 'complete']);
+
+Route::post('/todo/title', [ToDoListController::class, 'store']);
