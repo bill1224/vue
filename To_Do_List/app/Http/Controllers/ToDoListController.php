@@ -39,4 +39,12 @@ class ToDoListController extends Controller
             'list_arr' => $list_arr
         ], 200);
     }
+
+    public function detail($id) {
+        $todo_detail = ToDoList::where('id', $id)->first();
+
+        return view('home', [
+            'todo_detail' => $todo_detail
+        ]);
+    }
 }

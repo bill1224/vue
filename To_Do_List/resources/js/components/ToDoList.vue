@@ -1,22 +1,33 @@
 <template>
-    <div class="w-2/5">
-        <div class="text-center mb-20"><span class="text-5xl">To Do List of Jong-In</span></div>
+    <div class="row">
+        <div class="text-center mb-4"><span class="fs-1">To Do List of Jong-In</span></div>
         <input 
             type="text" 
             v-model="title" 
             @keyup.enter="submit" 
             placeholder="할 일을 적어주세요" 
-            class="mb-4 bg-pink-200 border-4 border-pink-400 w-full" 
+            class="mb-4  border-4 border-pink-400 w-full" 
         >
-        <template  v-for="ToDo in NotCompleteToDOList" :key="ToDo.id">
-            <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect"/>                      
-        </template>                   
+        <template v-for="ToDo in NotCompleteToDOList" :key="ToDo.id">
+            <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect"/>                                  
+        </template>
+
+        <div class="text-center mt-2">
+            <button type="button" class="btn btn-warning" @click="changeState('0')">할 일</button>            
+            <button type="button" class="btn btn-primary mx-2" @click="changeState('1')">완료</button>      
+            <button type="button" class="btn btn-primary" @click="changeState('all')">전체</button>      
+        </div>            
     </div>
 </template>
+
 <script>
 import ToDoView from './ToDoView.vue';
 
 export default {
+    setup: () => ({
+        greeting: 'Hello World from Vue 3!'
+    }),
+
     components: {
         ToDoView
     },
@@ -24,7 +35,8 @@ export default {
     data() {
         return {
             ToDoList: [],
-            title: '',            
+            title: '',
+            currentState: "0",        
         }
     },
 
@@ -37,15 +49,9 @@ export default {
         });
     },
 
-    // watch: {
-    //     ToDoList: function (newVal, oldVal) {
-    //     this.NotCompleteToDOList = newVal.filter(todo => todo.completion_is === "0");
-    //     }
-    // },
-
     computed: {
         NotCompleteToDOList() {
-            return this.ToDoList.filter(todo => todo.completion_is === "0");
+            return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState);
         }
     },
 
@@ -77,6 +83,11 @@ export default {
                 console.log(res);
                 this.ToDoList = res.data.list_arr;             
         });
+      },
+
+      changeState(value) {
+          this.currentState = value;
+          return;
       }
     }
 }

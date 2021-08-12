@@ -11,7 +11,7 @@
 export default {
     props: {
         toDo: {
-            type:Number,
+            type:Object,
             required: true,
         }
     },
