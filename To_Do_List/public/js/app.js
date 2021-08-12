@@ -18993,7 +18993,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       ToDoList: [],
-      title: ''
+      title: '',
+      NotCompleteToDOList: []
     };
   },
   created: function created() {
@@ -19006,6 +19007,18 @@ __webpack_require__.r(__webpack_exports__);
       console.log(error);
     });
   },
+  // watch: {
+  //     ToDoList: function (newVal, oldVal) {
+  //     this.NotCompleteToDOList = newVal.filter(todo => todo.completion_is === "0");
+  //     }
+  // },
+  computed: {
+    NotCompleteToDOList: function NotCompleteToDOList() {
+      return this.ToDoList.filter(function (todo) {
+        return todo.completion_is === "0";
+      });
+    }
+  },
   methods: {
     onClickRedirect: function onClickRedirect() {
       window.open("https://google.com", "_blank");
@@ -19013,12 +19026,12 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this2 = this;
 
-      //if문을 쓴이유는 text가 있을 때만 저장하겠다는 뜻 
+      //if문을 쓴이유는 text가 있을 때만
       if (this.title) {
         axios.post('api/todo/title', {
           title: this.title
         }).then(function (res) {
-          _this2.ToDoList.push(res.data.ToDoList);
+          _this2.ToDoList = res.data.ToDoList;
         });
       } //text를 저장하고 나서는 text창 초기화
 
@@ -19026,12 +19039,15 @@ __webpack_require__.r(__webpack_exports__);
       this.title = '';
     },
     complete: function complete(id) {
+      var _this3 = this;
+
       axios.get('api/todo/complete', {
         params: {
           ToDoId: id
         }
       }).then(function (res) {
-        tihs.ToDoList = res.data.list_arr;
+        console.log(res);
+        _this3.ToDoList = res.data.list_arr;
       });
     }
   }
@@ -19064,13 +19080,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, ["enter"]))
   }, null, 544
   /* HYDRATE_EVENTS, NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.title]]), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.ToDoList, function (ToDo, i) {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.title]]), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.NotCompleteToDOList, function (ToDo) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-      key: i,
+      key: ToDo.id,
       onClick: function onClick($event) {
         return $options.complete(ToDo.id);
       },
-      "class": "text-center border-2 rounded"
+      "class": "text-center border-2 rounded hover:bg-gray-400"
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(ToDo.title), 9
     /* TEXT, PROPS */
     , _hoisted_1);

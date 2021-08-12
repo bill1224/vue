@@ -1,10 +1,10 @@
 <template>
     <div>
         <input type="text" v-model="title" @keyup.enter="submit">        
-        <div v-for="(ToDo, i) in ToDoList"
-            :key="i"
+        <div v-for="ToDo in NotCompleteToDOList"
+            :key="ToDo.id"            
             @click="complete(ToDo.id)"
-            class="text-center border-2 rounded"     
+            class="text-center border-2 rounded hover:bg-gray-400"     
         >
             {{ ToDo.title }}
         </div>            
@@ -15,7 +15,8 @@ export default {
     data() {
         return {
             ToDoList: [],
-            title: '',            
+            title: '',
+            NotCompleteToDOList: []         
         }
     },
 
@@ -28,20 +29,32 @@ export default {
         });
     },
 
+    // watch: {
+    //     ToDoList: function (newVal, oldVal) {
+    //     this.NotCompleteToDOList = newVal.filter(todo => todo.completion_is === "0");
+    //     }
+    // },
+
+    computed: {
+        NotCompleteToDOList() {
+            return this.ToDoList.filter(todo => todo.completion_is === "0");
+        }
+    },
+
     methods:{
       onClickRedirect() {   
           window.open("https://google.com", "_blank");    
       },
 
       submit() { 
-          //if문을 쓴이유는 text가 있을 때만 저장하겠다는 뜻 
+          //if문을 쓴이유는 text가 있을 때만
             if(this.title) {
                 axios.post('api/todo/title', {
                     title: this.title
                 }).then(res => {                    
-                    this.ToDoList.push(res.data.ToDoList);
+                    this.ToDoList = res.data.ToDoList;
                 });
-            }
+            }            
             //text를 저장하고 나서는 text창 초기화
             this.title='';
       },
@@ -52,7 +65,8 @@ export default {
                   ToDoId: id
               }
           }).then(res => {
-                tihs.ToDoList = res.data.list_arr;
+                console.log(res);
+                this.ToDoList = res.data.list_arr;             
         });
       }
     }

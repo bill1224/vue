@@ -21,6 +21,7 @@ class ToDoListController extends Controller
         ]);                   
 
         $ToDoList = ToDoList::create($validated);
+        $ToDoList = ToDoList::where('completion_is', "1")->get();
 
         return response()->json([
             'ToDoList' => $ToDoList
@@ -33,7 +34,7 @@ class ToDoListController extends Controller
         $ToDoList->completion_is = "1";
         $ToDoList->save();
 
-        $list_arr = ToDoList::get();
+        $list_arr = ToDoList::where('completion_is', "0")->get();
         return response()->json([
             'list_arr' => $list_arr
         ], 200);
