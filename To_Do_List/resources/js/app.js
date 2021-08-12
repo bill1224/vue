@@ -1,8 +1,8 @@
 require('./bootstrap');
 
 import { createApp } from 'vue'
-import TestFile from './components/TestFile.vue';
+import ToDoList from './components/ToDoList.vue';
 
 const app = createApp({});
-app.component('test-file', TestFile)
+app.component('to-do-list', ToDoList)
     .mount('#app');

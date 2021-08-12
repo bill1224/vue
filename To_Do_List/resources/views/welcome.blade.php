@@ -1,5 +1,5 @@
 @extends('layout.main')
 
 @section('content')
-    <test-file />
+    <to-do-list />
 @endsection
