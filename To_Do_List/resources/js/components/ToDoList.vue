@@ -9,7 +9,7 @@
             class="mb-4  border-4 border-pink-400 w-full" 
         >
         <template v-for="ToDo in NotCompleteToDOList" :key="ToDo.id">
-            <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect"/>                                  
+            <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)"/>                                  
         </template>
 
         <div class="text-center mt-2">

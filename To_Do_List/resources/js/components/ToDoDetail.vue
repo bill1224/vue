@@ -11,7 +11,7 @@
         </div>
         <div class="text-center">
             <button type="button" class="btn btn-warning mr-2">Warning</button>            
-            <button type="button" class="btn btn-primary">Primary</button>                 
+            <button type="button" class="btn btn-primary" @click="redirectToDateSet(toDoDetail.id)">상세설정</button>         
         </div>                                            
     </div>
 </template>
@@ -28,5 +28,11 @@ export default {
             required: true,
         }
     },
+
+    methods: {
+        redirectToDateSet(id) {
+            window.location.href = `/todo/setDetail/${id}`;
+        }
+    }
 }
 </script>

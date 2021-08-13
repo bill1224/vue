@@ -47,4 +47,15 @@ class ToDoListController extends Controller
             'todo_detail' => $todo_detail
         ]);
     }
+
+    public function updateDetail() {
+        $ToDoList = ToDoList::find(request('id'));
+        $ToDoList->description = request('description');
+        $ToDoList->deadline = request('deadline');
+        $ToDoList->save();
+
+        return response()->json([
+            'ToDoList' => $ToDoList
+        ], 200);
+    }
 }

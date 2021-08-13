@@ -24,3 +24,6 @@ Route::get('/todo', [ToDoListController::class, 'index']);
 Route::get('/todo/complete', [ToDoListController::class, 'complete']);
 
 Route::post('/todo/title', [ToDoListController::class, 'store']);
+
+Route::post('/todo/updateDetail', [ToDoListController::class, 'updateDetail']);
+

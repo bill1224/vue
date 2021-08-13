@@ -21,3 +21,9 @@ Route::get('/', function () {
 Route::get('/todo', [ToDoListController::class, 'index']);
 
 Route::get('/todo/detail/{id}', [ToDoListController::class, 'detail']);
+
+Route::get('/todo/setDetail/{id}', function($id) {
+    return view('SetDetail', [
+        'id' => $id
+    ]);    
+});
