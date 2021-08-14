@@ -62,14 +62,16 @@ export default {
 
       submit() { 
           //if문을 쓴이유는 text가 있을 때만
-            if(this.title) {
+            if(this.title === '') {
+                alert("글을 입력해야지!!");
+            } else {
                 axios.post('api/todo/title', {
                     title: this.title
                 }).then(res => {                    
                     this.ToDoList = res.data.ToDoList;
                     // this.ToDoList.push(res.data.ToDoList);
                 });
-            }            
+            }         
             //text를 저장하고 나서는 text창 초기화
             this.title='';
       },

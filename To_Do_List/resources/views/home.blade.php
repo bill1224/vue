@@ -1,5 +1,5 @@
 @extends('layout.main')
 
 @section('content')
-    <to-do-detail :to-do-detail="{{ $todo_detail }}"/>
+    <to-do-detail :to-do-id="{{ $id }}"/>
 @endsection

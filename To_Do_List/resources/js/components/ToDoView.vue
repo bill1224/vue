@@ -5,7 +5,7 @@
     >
         <p class="text-start p-2" :style="hiddenText">{{ toDo.title }}</p>
         <!-- <span>{{ toDo.deadline !== null ? toDo.deadline : undefined_deadline }}</span> -->
-        <p class="text-end p-2"> {{ toDo.deadline !== null  ? `D - ${elapsedDay}` :  "시간설정을 해주세요."}}</p>
+        <p class="text-end p-2">{{ printDDay() }}</p>
     </div>
 </template>
 
@@ -46,6 +46,19 @@ export default {
         onClickToDetail(id) {
             this.$emit('onClickToDetail', id);
         },
+
+        printDDay() {
+            this.toDo.deadline !== null  ? `D - ${this.elapsedDay}` :  "시간설정을 해주세요.";
+            if ( this.toDo.deadline !== null ) {
+                if ( this.elapsedDay < 0 ) {
+                    return "Deadline 이미 지났어!! 왜 완료 못했니?!";
+                } else {
+                    return `D - ${this.elapsedDay}`;
+                }
+            } else {
+                return "Deadline을 설정해주세요!";
+            }            
+        }
     },
 } 
 </script>
