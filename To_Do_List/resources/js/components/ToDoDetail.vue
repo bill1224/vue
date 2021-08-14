@@ -3,7 +3,7 @@
         <div class="text-center fs-1 mb-4" @click="redirectToHome">To Do Detail</div>        
         <div class="grid grid-cols-6 gap-4 border-3 rounded-1 mb-2 p-4 w-full">
             <div class="col-start-1 col-end-6" :style="hiddenText">{{ toDo.title }}</div>
-            <div class="col-start-7">
+            <div v-if="mode" class="col-start-7">
                 <div class="grid grid-cols-2 text-sm">
                     <div>CreatedAt</div>
                     <div> {{ String(toDo.created_at).slice(0, 10) }}</div>
@@ -12,13 +12,17 @@
                     <div>DeadLine</div>
                     <div>{{ checkDeadLine(toDo.deadline) }}</div>
                 </div>
-            </div>            
+            </div>
+            <div v-else class="col-start-7">
+                <div class="text-2xl font-black">Done !!</div>
+            </div>           
         </div>
         <div class="border border-3 border-primary rounded-1 mb-2 p-4">
             <div class="col-8">{{ toDo.description !== null ? toDo.description : "상세내용을 적어주세요."}}</div>            
         </div>
-        <div class="text-center">
-            <button type="button" class="btn btn-warning mr-2" @click="complete(toDo.id)">완료</button>            
+        <div class="text-center">            
+            <button  v-if="mode" type="button" class="btn btn-warning mr-2" @click="complete(toDo.id)">완료</button>       
+            <button v-else type="button" class="btn btn-warning mr-2" @click="unComplete(toDo.id)">복구</button>
             <button type="button" class="btn btn-primary" @click="redirectToDateSet(toDo.id)">상세설정</button>         
         </div>                                            
     </div>
@@ -40,7 +44,8 @@ export default {
     data() {
         return {
             id: this.toDoId,
-            toDo: [],
+            toDo: [],            
+            mode: '',         
             hiddenText: {
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -56,6 +61,7 @@ export default {
             }
         }).then(res => {
             this.toDo = res.data.todo_detail;
+            this.mode = res.data.todo_detail.completion_is === "0" ? true : false;
             console.log(res);
         });
     },
@@ -78,7 +84,18 @@ export default {
                 console.log(res);
                 // this.ToDoList = res.data.list_arr;             
         });
-        window.location.href = '/';
+        this.mode = false; 
+      },
+
+      unComplete(id) {
+          axios.get('../../api/todo/uncomplete', {
+              params: {
+                  ToDoId: id
+              }
+          }).then(res => {
+                console.log(res);                          
+        });
+        this.mode = true;     
       },
 
       redirectToHome() {
