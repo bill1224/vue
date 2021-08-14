@@ -1,8 +1,8 @@
 <template>
     <div class="container w-3/5">
         <div class="text-center fs-1 mb-4" @click="redirectToHome">To Do Detail</div>        
-        <div class="grid grid-cols-6 gap-4 border-3 rounded-1 mb-2 p-4 w-full">
-            <div class="col-start-1 col-end-6" :style="hiddenText">{{ toDo.title }}</div>
+        <div class="grid grid-cols-6 gap-4 border-3 rounded-1 mb-2 p-4 w-full" :style="!mode ? backgroud : null">
+            <div class="col-start-1 col-end-6" :class="{ Done : !mode }" :style="hiddenText">{{ toDo.title }}</div>
             <div v-if="mode" class="col-start-7">
                 <div class="grid grid-cols-2 text-sm">
                     <div>CreatedAt</div>
@@ -17,7 +17,7 @@
                 <div class="text-2xl font-black">Done !!</div>
             </div>           
         </div>
-        <div class="border border-3 border-primary rounded-1 mb-2 p-4">
+        <div class="border border-3 border-primary rounded-1 mb-2 p-4" :class="{ Done : !mode }" :style="!mode ? backgroud : null">
             <div class="col-8">{{ toDo.description !== null ? toDo.description : "상세내용을 적어주세요."}}</div>            
         </div>
         <div class="text-center">            
@@ -30,10 +30,6 @@
 
 <script>
 export default {
-    setup: () => ({
-        greeting: 'Hello World from Vue 3!'
-    }),
-
     props: {
         toDoId: {
             type: Number,
@@ -50,7 +46,10 @@ export default {
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap'
-            }            
+            },
+            backgroud: {
+                backgroundColor: 'gray'
+            }      
         }
     },
 
@@ -104,3 +103,10 @@ export default {
     }
 }
 </script>
+
+//scoped 는 현재 컴포넌트에서만 style이 먹도록 하는 것 (다른 컴포넌트에는 비적용)
+<style scoped>
+    .Done {
+        text-decoration: line-through;        
+    }
+</style>
