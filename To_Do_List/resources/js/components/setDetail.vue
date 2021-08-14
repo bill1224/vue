@@ -1,10 +1,13 @@
 <template>
     <div class=".container w-3/5">
         <div class="text-center fs-1 mb-4">Set Detail</div>
-        <div class="row mb-2 border border-2 border-info">
+        <div class="mb-2 border border-2 border-blue-300">
+            <input type="text" class="w-full p-2" v-model="title">                  
+        </div>
+        <div class="row mb-2 border border-2 border-blue-300">
             <div class="col">
                 <textarea rows="15" placeholder="상세내용을 적어주세요." v-model="description"
-                    class="w-full"></textarea>
+                    class="w-full p-2"></textarea>                    
             </div>
         </div>
         <div class="row border border-2 border-info mb-2 p-2">
@@ -40,10 +43,26 @@ export default {
         return {
             today: new Date(today[0], today[1], today[2]).getTime(),            
             elapsedDay: '',
+            title: '',
             description: '', 
-            deadline: '',
+            deadline: '',        
             errorMessage: '',
+            todoList: '',
         }
+    },
+
+    created() {
+        axios.get('../../api/todo/Showdetail', {
+            params: {
+                id: this.toDoId
+            }
+        }).then(res => {            
+            this.todoList = res.data.todo_detail;
+            this.title = res.data.todo_detail.title;
+            this.description = res.data.todo_detail.description;
+            this.deadline = res.data.todo_detail.deadline;
+
+        })
     },
 
     methods: {

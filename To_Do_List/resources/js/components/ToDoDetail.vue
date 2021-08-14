@@ -40,8 +40,8 @@ export default {
     data() {
         return {
             id: this.toDoId,
-            toDo: [],            
-            mode: '',         
+            toDo: [],
+            mode: true,                          
             hiddenText: {
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',

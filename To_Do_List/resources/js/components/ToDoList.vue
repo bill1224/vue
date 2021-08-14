@@ -1,6 +1,9 @@
 <template>
     <div class="w-3/5">
         <div class="text-center mb-4"><span class="fs-1">To Do List of Jong-In</span></div>
+        <div v-if="currentState === '0'">해야할 일 : {{ NotCompleteToDOList.length }} </div>
+        <div v-else-if="currentState === '1'">완료한 일 : {{ NotCompleteToDOList.length }}</div>
+        <div v-else>전체 : {{ NotCompleteToDOList.length }}</div>
         <input 
             type="text" 
             v-model="title" 
@@ -24,10 +27,6 @@
 import ToDoView from './ToDoView.vue';
 
 export default {
-    setup: () => ({
-        greeting: 'Hello World from Vue 3!'
-    }),
-
     components: {
         ToDoView
     },
@@ -36,7 +35,7 @@ export default {
         return {
             ToDoList: [],
             title: '',
-            currentState: "0",              
+            currentState: "0",            
         }
     },
 
