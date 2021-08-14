@@ -20,7 +20,9 @@ Route::get('/', function () {
 
 Route::get('/todo', [ToDoListController::class, 'index']);
 
-Route::get('/todo/detail/{id}', [ToDoListController::class, 'detail']);
+Route::get('/todo/detail/{id}', function($id) {
+    return view('home', ['id' => $id]);
+});
 
 Route::get('/todo/setDetail/{id}', function($id) {
     return view('SetDetail', [
