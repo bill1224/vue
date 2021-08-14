@@ -1,12 +1,12 @@
 <template>
-    <div class="row">
+    <div class="w-3/5">
         <div class="text-center mb-4"><span class="fs-1">To Do List of Jong-In</span></div>
         <input 
             type="text" 
             v-model="title" 
             @keyup.enter="submit" 
             placeholder="할 일을 적어주세요" 
-            class="mb-4  border-4 border-pink-400 w-full" 
+            class="mb-4  border-4 border-pink-400 w-full p-2" 
         >
         <template v-for="ToDo in NotCompleteToDOList" :key="ToDo.id">
             <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)"/>                                  
@@ -36,7 +36,7 @@ export default {
         return {
             ToDoList: [],
             title: '',
-            currentState: "0",        
+            currentState: "0",              
         }
     },
 
