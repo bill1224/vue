@@ -79,9 +79,9 @@ export default {
             if(this.value === 1004) {
                 return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState);
             } else if (this.value === 1141) {
-                return this.ToDoList.filter(todo => this.currentState === "all" || todo.important_is === 1);
+                return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
             } else {
-                return this.ToDoList.filter(todo => this.currentState === "all" || todo.group === String(this.value));
+                return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === String(this.value) || todo.group === String(this.value) && todo.completion_is === this.currentState);
             }
         }          
     },
