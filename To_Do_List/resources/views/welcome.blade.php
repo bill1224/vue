@@ -1,5 +1,7 @@
 @extends('layout.main')
 
 @section('content')
-    <to-do-list />
+    <div class="flex-1 h-full">
+        <to-do-list />        
+    </div>    
 @endsection
