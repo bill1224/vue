@@ -23,7 +23,7 @@
             </div>
             
             <template v-for="ToDo in NotCompleteToDOList" :key="ToDo.id" class="flex-1">
-                <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)"/>                                  
+                <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
             </template>
 
             <div class="text-center mt-2">
@@ -58,8 +58,14 @@ export default {
             ToDoList: [],
             title: '',
             currentState: "0",
-            Groups: '',
+            Groups: [],
             value: 1004,            
+        }
+    },
+
+    watch: {
+        NotCompleteToDOList: function (newVal, oldVal) {
+            console.log(newVal);
         }
     },
 
@@ -77,7 +83,8 @@ export default {
     computed: {
         NotCompleteToDOList() {
             if(this.value === 1004) {
-                return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState);
+                this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState);
+                return this.ToDoList.sort(function (a, b) { return b.important_is - a.important_is });
             } else if (this.value === 1141) {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
             } else {
@@ -125,6 +132,13 @@ export default {
 
       getCategoryNumber(value) {
           this.value = value
+      },
+
+      reGetList() {
+          axios.get('api/todo').then(res => {
+                console.log(res);                
+                this.ToDoList = res.data.list_arr;
+        });
       }
     }
 }

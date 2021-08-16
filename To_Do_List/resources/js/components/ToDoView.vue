@@ -71,8 +71,9 @@ export default {
                 }
             }).then(res => {
                 this.IsImportant = res.data.ToDoList.important_is;
+                this.$emit('reGetList');
             })
-        }
+        },
     },
 } 
 </script>
