@@ -30,10 +30,7 @@
                 <button type="button" class="btn btn-warning" @click="changeState('0')">할 일</button>            
                 <button type="button" class="btn btn-primary mx-2" @click="changeState('1')">완료</button>      
                 <button type="button" class="btn btn-primary" @click="changeState('all')">전체</button>      
-            </div>
-            <div>
-                {{ value }}    
-            </div>     
+            </div> 
         </div>
     </div>
     

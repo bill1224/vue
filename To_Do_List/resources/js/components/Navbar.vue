@@ -1,19 +1,11 @@
 <template>
     <div>
-        <div class="mb-2" @click="changeCategory(1004)">
+        <div class="mb-2 border-b-2 p-2" @click="changeCategory(1004)">
             일반
         </div>
-        <div class="mb-2" @click="changeCategory(1141)">
+        <div class="mb-2 p-2" @click="changeCategory(1141)">
             중요
         </div>
-        <!-- <div 
-            v-for="Group in groupArr" 
-            :key="Group.id"
-            class="mb-2"
-        >
-            {{ Group.group_name }}
-        </div> -->
-
         <div class="form-floating">
             <select class="form-select" id="floatingSelect" aria-label="Floating label select example" v-model="categoryNum">
                 <template v-for="Group in groupArr" :key="Group.id">            
@@ -21,9 +13,6 @@
                 </template>                       
             </select>
             <label for="floatingSelect">Group with selects</label>
-        </div>
-        <div>
-            {{ categoryNum }}        
         </div>
     </div>
 </template>

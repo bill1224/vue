@@ -1,5 +1,7 @@
 @extends('layout.main')
 
 @section('content')
-    <set-detail :to-do-id="{{ $id }}"/>
+    <div class="flex-1 h-full">
+        <set-detail :to-do-id="{{ $id }}"/>
+    </div>    
 @endsection

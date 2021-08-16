@@ -1,4 +1,5 @@
 <template>
+    <Header />
     <div class="container w-3/5">
         <div class="text-center fs-1 mb-4" @click="redirectToHome">To Do Detail</div>        
         <div class="grid grid-cols-6 gap-4 border-3 rounded-1 mb-2 p-4 w-full" :style="!mode ? backgroud : null">
@@ -29,12 +30,18 @@
 </template>
 
 <script>
+import Header from './Header.vue';
+
 export default {
     props: {
         toDoId: {
             type: Number,
             required: true,
         }
+    },
+
+    components: {
+        Header,
     },
 
     data() {

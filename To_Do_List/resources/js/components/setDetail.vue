@@ -1,21 +1,21 @@
 <template>
-    <div class=".container w-3/5">
+    <Header />
+
+    <div class="container w-3/5">
         <div class="text-center fs-1 mb-4">Set Detail</div>
         <div class="mb-2 border border-2 border-blue-300">
             <input type="text" class="w-full p-2" v-model="title">                  
         </div>
-        <div class="row mb-2 border border-2 border-blue-300">
-            <div class="col">
+        <div class="mb-2 border border-2 border-blue-300">
+            <div>
                 <textarea rows="15" placeholder="상세내용을 적어주세요." v-model="description"
                     class="w-full p-2"></textarea>                    
             </div>
         </div>
-        <div class="row border border-2 border-info mb-2 p-2">
-            <div class="col">
-                <label for="date">Set Deadline</label>                
-            </div>
-            <div class="col">
-                <input type="date" id="date" v-model="deadline" class="border border-1 border-dark">
+        <div class="grid grid-cols-2 border border-2 border-blue-300 mb-2 p-2">
+            <div class="col-start-2">
+                <label for="date" class="text-sm pl-20">Set Deadline</label>                
+                <input type="date" id="date" v-model="deadline" class="border border-1 border-dark ml-2">
             </div>
         </div>
         <div class="text-red-900 font-black">
@@ -29,6 +29,7 @@
 
 <script>
 import dayjs from 'dayjs'
+import Header from './Header.vue';
 
 export default {
     props: {
@@ -36,6 +37,10 @@ export default {
             type: Number,
             required: true,
         }
+    },
+
+    components: {
+        Header,
     },
 
     data() {
