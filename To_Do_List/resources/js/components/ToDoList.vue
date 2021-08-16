@@ -1,20 +1,21 @@
 <template>
-    <Header />    
     <div class="black-bg" v-if="modal_is_state">
         <div class="white-bg">
             <div>
                 <input class="border-4 border-pink-400 w-full p-2 mb-2" type="text" v-model="groupName" placeholder="생성할 그룹명을 적어주세요.">
             </div>
             <div class="text-center">
-                <button type="button" class="btn btn-primary mr-2" @click="create">생성</button>
+                <button type="button" class="btn btn-primary mr-2" @click="createGroup">생성</button>
                 <button type="button" class="btn btn-warning" @click="modal_is_state=false">닫기</button>
             </div>        
         </div>
     </div>
 
+    <Header />
+
     <div class="flex h-full">
         <div class="w-1/5 border-r-2 border-solid border-gray-600">
-            <Navbar :group-arr="Groups" @get-category-number="getCategoryNumber"/>
+            <Navbar :group-arr="Groups" @get-category-number="getCategoryNumber" @show-modal="showModal"/>
         </div>
 
         <div class="w-4/5 flex flex-col px-16">
@@ -68,8 +69,8 @@ export default {
             currentState: "0",
             Groups: [],
             value: 1004,
-            modal_is_state: true,
-            groupName: 'sdfsdfdf',    
+            modal_is_state: false,
+            groupName: '',    
         }
     },
 
@@ -79,7 +80,7 @@ export default {
                 this.ToDoList = res.data.list_arr;
         });
 
-        axios.get('api/getGroup').then(res => {
+        axios.get('api/group').then(res => {
             this.Groups = res.data.Groups;            
         });
     },
@@ -141,6 +142,19 @@ export default {
           axios.get('api/todo').then(res => {                            
                 this.ToDoList = res.data.list_arr;
         });
+      },
+
+      createGroup() {
+          axios.post('api/group/create', {
+              group_name: this.groupName
+          }).then(res => {              
+              this.modal_is_state = false;
+              this.Groups.push(res.data.Group);
+          });
+      },
+
+      showModal() {
+          this.modal_is_state = true
       }
     }
 }
