@@ -1,4 +1,5 @@
 <template>
+    <div ref="getData" @click="aaa">hello</div>
     <div class="black-bg" v-if="modal_is_state">
         <div class="white-bg">
             <div>
@@ -70,7 +71,8 @@ export default {
             Groups: [],
             value: 1004,
             modal_is_state: false,
-            groupName: '',    
+            groupName: '',
+            getData: "getData",
         }
     },
 
@@ -155,6 +157,11 @@ export default {
 
       showModal() {
           this.modal_is_state = true
+      },
+
+      aaa() {
+        const aa = eval(`this.$refs.${this.getData}.innerHTML`);
+        console.log(aa);
       }
     }
 }

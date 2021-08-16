@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div>        
         <div class="mb-2 border-b-2 p-2" @click="changeCategory(1004)">
-            전체
+           전체
         </div>
         <div class="mb-2 p-2" @click="changeCategory(1141)">
-            중요
+           중요
         </div>
         <div class="form-floating">
             <select class="form-select" id="floatingSelect" aria-label="Floating label select example" v-model="categoryNum">
@@ -34,7 +34,7 @@ export default {
     data() {
         return {     
             categoryNum: '',
-            text: '변경전',            
+            text: '변경전',                          
         }
     },
 
@@ -44,20 +44,14 @@ export default {
         }
     },
 
-    // created() {
-    //     axios.get('api/getGroup').then(res => {
-    //         this.Groups = res.data.Groups;
-    //     })
-    // },
-
     methods: {
-        changeCategory(Num) {
-            this.categoryNum = Num;
+        changeCategory(Num) {            
+            this.categoryNum = Num;            
         },
 
         clickModal() {
             this.$emit('showModal');
-        }
+        },       
     },
 }
 </script>
