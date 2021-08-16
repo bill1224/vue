@@ -20,9 +20,9 @@
 
         <div class="w-4/5 flex flex-col px-16">
             <div class="text-center mb-4"><span class="fs-1"> {{ category === '' ? "전체" : category }} </span></div>
-            <!-- <div v-if="currentState === '0'">해야할 일 : {{ NotCompleteToDOList.length }} </div>
-            <div v-else-if="currentState === '1'">완료한 일 : {{ NotCompleteToDOList.length }}</div>
-            <div v-else>전체 : {{ NotCompleteToDOList.length }}</div> -->
+            <!-- <div v-if="currentState === '0'">해야할 일 : {{ NotCompleteToDoList.length }} </div>
+            <div v-else-if="currentState === '1'">완료한 일 : {{ NotCompleteToDoList.length }}</div>
+            <div v-else>전체 : {{ NotCompleteToDoList.length }}</div> -->
 
             <div class="flex-initial p-2">
                 <input 
@@ -34,7 +34,7 @@
                 >
             </div>
             
-            <template v-for="ToDo in NotCompleteToDOList" :key="ToDo.id" class="flex-1">
+            <template v-for="ToDo in NotCompleteToDoList" :key="ToDo.id" class="flex-1">
                 <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
             </template>
 
@@ -68,7 +68,7 @@ export default {
             title: '',
             currentState: "0",
             Groups: [],
-            value: 1004,
+            categoryNum: 1004,
             modal_is_state: false,
             groupName: '',
             getData: "getData",
@@ -77,8 +77,7 @@ export default {
     },
 
     created() {
-        axios.get('api/todo').then(res => {
-                console.log(res);                
+        axios.get('api/todo').then(res => {                        
                 this.ToDoList = res.data.list_arr;
         });
 
@@ -88,14 +87,13 @@ export default {
     },
 
     computed: {
-        NotCompleteToDOList() {
-            if(this.value === 1004) {
-                return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
-                // return this.ToDoList.sort(function (a, b) { return b.important_is - a.important_is });
-            } else if (this.value === 1141) {
+        NotCompleteToDoList() {            
+            if(this.categoryNum === 1004) {
+                return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });                
+            } else if (this.categoryNum === 1141) {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
             } else {
-                return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === String(this.value) || todo.group === String(this.value) && todo.completion_is === this.currentState);
+                return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === String(this.categoryNum) || todo.group === String(this.categoryNum) && todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
             }
         }          
     },
@@ -111,10 +109,10 @@ export default {
                 alert("글을 입력해야지!!");
             } else {
                 axios.post('api/todo/title', {
-                    title: this.title
-                }).then(res => {                    
-                    this.ToDoList = res.data.ToDoList;
-                    // this.ToDoList.push(res.data.ToDoList);
+                    title: this.title,
+                    group: this.categoryNum
+                }).then(res => {                                        
+                    this.ToDoList.push(res.data.ToDoList);
                 });
             }         
             //text를 저장하고 나서는 text창 초기화
@@ -137,7 +135,7 @@ export default {
       },
 
       getCategoryNumber(num, category) {
-          this.value = num;
+          this.categoryNum = num;
           this.category = category;
       },
 

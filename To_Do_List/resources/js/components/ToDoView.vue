@@ -18,9 +18,7 @@ import dayjs from 'dayjs'
 export default {
     props: {
         toDo: {
-            type:Object,
-            required: true,
-            
+            type:Object,            
         }
     },
 
