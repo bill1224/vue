@@ -158,7 +158,7 @@ export default {
       showModal() {
           this.modal_is_state = true
       },
-
+    
       aaa() {
         const aa = eval(`this.$refs.${this.getData}.innerHTML`);
         console.log(aa);

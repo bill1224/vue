@@ -1,5 +1,6 @@
 <template>
-    <div>        
+    <div>
+        <div ref="getData" @click="bbb">hello</div>
         <div class="mb-2 border-b-2 p-2" @click="changeCategory(1004)">
            전체
         </div>
@@ -7,7 +8,7 @@
            중요
         </div>
         <div class="form-floating">
-            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" v-model="categoryNum">
+            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" @change="changeCategory(categoryNum)" v-model="categoryNum">
                 <template v-for="Group in groupArr" :key="Group.id">            
                     <option :value="Group.id">{{ Group.group_name }}</option>
                 </template>                       
@@ -34,24 +35,26 @@ export default {
     data() {
         return {     
             categoryNum: '',
-            text: '변경전',                          
-        }
-    },
-
-    watch: {
-        categoryNum: function (newVal, oldVal) {
-            this.$emit("getCategoryNumber", newVal);
+            text: '변경전',
+            getData: 'getData',                      
         }
     },
 
     methods: {
-        changeCategory(Num) {            
-            this.categoryNum = Num;            
+        changeCategory(Num) {
+            // const aa = eval(`this.$refs.${this.getData}.innerHTML`);
+            // console.log(aa);        
+            // this.categoryNum = Num;
+            this.$emit("getCategoryNumber", Num);         
         },
 
         clickModal() {
             this.$emit('showModal');
-        },       
+        },
+        
+        test(categoryNum) {
+            console.log(categoryNum);
+        }
     },
 }
 </script>
