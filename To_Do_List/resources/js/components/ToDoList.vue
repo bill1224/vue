@@ -63,12 +63,6 @@ export default {
         }
     },
 
-    watch: {
-        NotCompleteToDOList: function (newVal, oldVal) {
-            console.log(newVal);
-        }
-    },
-
     created() {
         axios.get('api/todo').then(res => {
                 console.log(res);                
@@ -83,8 +77,8 @@ export default {
     computed: {
         NotCompleteToDOList() {
             if(this.value === 1004) {
-                this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState);
-                return this.ToDoList.sort(function (a, b) { return b.important_is - a.important_is });
+                return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
+                // return this.ToDoList.sort(function (a, b) { return b.important_is - a.important_is });
             } else if (this.value === 1141) {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
             } else {
@@ -119,8 +113,7 @@ export default {
               params: {
                   ToDoId: id
               }
-          }).then(res => {
-                console.log(res);
+          }).then(res => {            
                 this.ToDoList = res.data.list_arr;             
         });
       },
@@ -135,8 +128,7 @@ export default {
       },
 
       reGetList() {
-          axios.get('api/todo').then(res => {
-                console.log(res);                
+          axios.get('api/todo').then(res => {                            
                 this.ToDoList = res.data.list_arr;
         });
       }
