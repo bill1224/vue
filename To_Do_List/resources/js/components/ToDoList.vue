@@ -1,5 +1,16 @@
 <template>
     <Header />    
+    <div class="black-bg" v-if="modal_is_state">
+        <div class="white-bg">
+            <div>
+                <input class="border-4 border-pink-400 w-full p-2 mb-2" type="text" v-model="groupName" placeholder="생성할 그룹명을 적어주세요.">
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-primary mr-2" @click="create">생성</button>
+                <button type="button" class="btn btn-warning" @click="modal_is_state=false">닫기</button>
+            </div>        
+        </div>
+    </div>
 
     <div class="flex h-full">
         <div class="w-1/5 border-r-2 border-solid border-gray-600">
@@ -56,7 +67,9 @@ export default {
             title: '',
             currentState: "0",
             Groups: [],
-            value: 1004,            
+            value: 1004,
+            modal_is_state: true,
+            groupName: 'sdfsdfdf',    
         }
     },
 
@@ -132,3 +145,20 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .black-bg {
+        width: 100%; height: 100%;
+        background: rgba(57, 17, 90, 0.5); 
+        position: fixed; padding: 20px;
+    }
+    .white-bg {
+        width: 30%; background: white;
+        border-radius: 8px;
+        padding: 20px;
+        position: absolute;
+        top: 35%;
+        left: 50%;        
+        transform: translate(-50%, -50%)
+    }
+</style>
