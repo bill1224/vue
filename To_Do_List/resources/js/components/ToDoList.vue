@@ -1,5 +1,4 @@
-<template>
-    <div ref="getData" @click="aaa">hello</div>
+<template>    
     <div class="black-bg" v-if="modal_is_state">
         <div class="white-bg">
             <div>
@@ -20,7 +19,7 @@
         </div>
 
         <div class="w-4/5 flex flex-col px-16">
-            <div class="text-center mb-4"><span class="fs-1">To Do List of Jong-In</span></div>
+            <div class="text-center mb-4"><span class="fs-1"> {{ category === '' ? "전체" : category }} </span></div>
             <!-- <div v-if="currentState === '0'">해야할 일 : {{ NotCompleteToDOList.length }} </div>
             <div v-else-if="currentState === '1'">완료한 일 : {{ NotCompleteToDOList.length }}</div>
             <div v-else>전체 : {{ NotCompleteToDOList.length }}</div> -->
@@ -73,6 +72,7 @@ export default {
             modal_is_state: false,
             groupName: '',
             getData: "getData",
+            category: '',
         }
     },
 
@@ -136,8 +136,9 @@ export default {
           return;
       },
 
-      getCategoryNumber(value) {
-          this.value = value
+      getCategoryNumber(num, category) {
+          this.value = num;
+          this.category = category;
       },
 
       reGetList() {
@@ -158,11 +159,6 @@ export default {
       showModal() {
           this.modal_is_state = true
       },
-    
-      aaa() {
-        const aa = eval(`this.$refs.${this.getData}.innerHTML`);
-        console.log(aa);
-      }
     }
 }
 </script>

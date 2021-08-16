@@ -1,16 +1,11 @@
 <template>
-    <div>
-        <div ref="getData" @click="bbb">hello</div>
-        <div class="mb-2 border-b-2 p-2" @click="changeCategory(1004)">
-           전체
-        </div>
-        <div class="mb-2 p-2" @click="changeCategory(1141)">
-           중요
-        </div>
+    <div>        
+        <div class="mb-2 border-b-2 p-2" @click="changeCategory(1004)" ref="getData1004">전체</div>
+        <div class="mb-2 p-2" @click="changeCategory(1141)" ref="getData1141">중요</div>
         <div class="form-floating">
             <select class="form-select" id="floatingSelect" aria-label="Floating label select example" @change="changeCategory(categoryNum)" v-model="categoryNum">
                 <template v-for="Group in groupArr" :key="Group.id">            
-                    <option :value="Group.id">{{ Group.group_name }}</option>
+                    <option :value="Group.id" :ref="`getData${Group.id}`">{{ Group.group_name }}</option>
                 </template>                       
             </select>
             <label for="floatingSelect">Group with selects</label>
@@ -35,17 +30,14 @@ export default {
     data() {
         return {     
             categoryNum: '',
-            text: '변경전',
-            getData: 'getData',                      
+            text: '변경전',                   
         }
     },
 
     methods: {
         changeCategory(Num) {
-            // const aa = eval(`this.$refs.${this.getData}.innerHTML`);
-            // console.log(aa);        
-            // this.categoryNum = Num;
-            this.$emit("getCategoryNumber", Num);         
+            const category = eval(`this.$refs.getData${Num}.innerHTML`);            
+            this.$emit("getCategoryNumber", Num, category);         
         },
 
         clickModal() {
