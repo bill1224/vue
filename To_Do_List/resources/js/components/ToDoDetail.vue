@@ -19,12 +19,12 @@
             </div>           
         </div>
         <div class="border border-3 border-primary rounded-1 mb-2 p-4" :class="{ Done : !mode }" :style="!mode ? backgroud : null">
-            <div class="col-8">{{ toDo.description !== null ? toDo.description : "상세내용을 적어주세요."}}</div>            
+            <div class="col-8">{{ toDo.description !== null ? toDo.description : "詳細内容を書いてください。"}}</div>            
         </div>
         <div class="text-center">            
-            <button  v-if="mode" type="button" class="btn btn-warning mr-2" @click="complete(toDo.id)">완료</button>       
-            <button v-else type="button" class="btn btn-warning mr-2" @click="unComplete(toDo.id)">복구</button>
-            <button type="button" class="btn btn-primary" @click="redirectToDateSet(toDo.id)">상세설정</button>         
+            <button  v-if="mode" type="button" class="btn btn-warning mr-2" @click="complete(toDo.id)">完了</button>       
+            <button v-else type="button" class="btn btn-warning mr-2" @click="unComplete(toDo.id)">復旧</button>
+            <button type="button" class="btn btn-primary" @click="redirectToDateSet(toDo.id)">詳細設定</button>         
         </div>                                            
     </div>
 </template>

@@ -52,15 +52,15 @@ export default {
         },
 
         printDDay() {
-            this.toDo.deadline !== null  ? `D - ${this.elapsedDay}` :  "시간설정을 해주세요.";
+            this.toDo.deadline !== null  ? `D - ${this.elapsedDay}` :  "時間を設定してください。";
             if ( this.toDo.deadline !== null ) {
                 if ( this.elapsedDay < 0 ) {
-                    return "Deadline 이미 지났어!! 왜 완료 못했니?!";
+                    return "Deadlineが、、もう過ぎました。";
                 } else {
                     return `D - ${this.elapsedDay}`;
                 }
             } else {
-                return "Deadline을 설정해주세요!";
+                return "Deadlineを設定してください。";
             }            
         },
 

@@ -2,11 +2,11 @@
     <div class="black-bg" v-if="modal_is_state">
         <div class="white-bg">
             <div>
-                <input class="border-4 border-pink-400 w-full p-2 mb-2" type="text" v-model="groupName" placeholder="생성할 그룹명을 적어주세요.">
+                <input class="border-4 border-pink-400 w-full p-2 mb-2" type="text" v-model="groupName" placeholder="作るため、グループ名を書いてください。">
             </div>
             <div class="text-center">
-                <button type="button" class="btn btn-primary mr-2" @click="createGroup">생성</button>
-                <button type="button" class="btn btn-warning" @click="modal_is_state=false">닫기</button>
+                <button type="button" class="btn btn-primary mr-2" @click="createGroup">作り</button>
+                <button type="button" class="btn btn-warning" @click="modal_is_state=false">閉める</button>
             </div>        
         </div>
     </div>
@@ -19,7 +19,7 @@
         </div>
 
         <div class="w-4/5 flex flex-col px-16">
-            <div class="text-center mb-4"><span class="fs-1"> {{ category === '' ? "전체" : category }} </span></div>
+            <div class="text-center mb-4"><span class="fs-1"> {{ category === '' ? "全体" : category }} </span></div>
             <!-- <div v-if="currentState === '0'">해야할 일 : {{ NotCompleteToDoList.length }} </div>
             <div v-else-if="currentState === '1'">완료한 일 : {{ NotCompleteToDoList.length }}</div>
             <div v-else>전체 : {{ NotCompleteToDoList.length }}</div> -->
@@ -29,7 +29,7 @@
                     type="text" 
                     v-model="title" 
                     @keyup.enter="submit" 
-                    placeholder="할 일을 적어주세요" 
+                    placeholder="ToDoを書いてください。" 
                     class="mb-4  border-4 border-pink-400 w-full p-2" 
                 >
             </div>
@@ -39,9 +39,9 @@
             </template>
 
             <div class="text-center mt-2">
-                <button type="button" class="btn btn-warning" @click="changeState('0')">할 일</button>            
-                <button type="button" class="btn btn-primary mx-2" @click="changeState('1')">완료</button>      
-                <button type="button" class="btn btn-primary" @click="changeState('all')">전체</button>      
+                <button type="button" class="btn btn-warning" @click="changeState('0')">進行</button>            
+                <button type="button" class="btn btn-primary mx-2" @click="changeState('1')">完了</button>      
+                <button type="button" class="btn btn-primary" @click="changeState('all')">全体</button>      
             </div> 
         </div>
     </div>
@@ -137,6 +137,7 @@ export default {
       getCategoryNumber(num, category) {
           this.categoryNum = num;
           this.category = category;
+          this.currentState = "0";
       },
 
       reGetList() {

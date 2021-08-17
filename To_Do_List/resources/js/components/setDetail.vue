@@ -8,7 +8,7 @@
         </div>
         <div class="mb-2 border border-2 border-blue-300">
             <div>
-                <textarea rows="15" placeholder="상세내용을 적어주세요." v-model="description"
+                <textarea rows="15" placeholder="詳しく書いてください。" v-model="description"
                     class="w-full p-2"></textarea>                    
             </div>
         </div>
@@ -22,7 +22,7 @@
             {{ errorMessage }}
         </div>
         <div class="text-center">
-            <button type="button" class="btn btn-warning" @click="submit(toDoId)">설정</button>
+            <button type="button" class="btn btn-warning" @click="submit(toDoId)">設定</button>
         </div>        
     </div>
 </template>
@@ -79,7 +79,7 @@ export default {
                     const elapsedMSec = deadlineSec - this.today;
                     this.elapsedDay = elapsedMSec / 1000 / 60 / 60 / 24;                    
                     if(this.elapsedDay < 0) {
-                        this.errorMessage = "DeadLine은 과거로 지정할 수 없어요";
+                        this.errorMessage = "DeadLineは、過去に設定できません";
                         return;
                     }
                 }
@@ -93,7 +93,7 @@ export default {
                 });
                 window.location.href = `/todo/detail/${id}`;
             } else {
-                this.errorMessage = "상세내용 or DeadLine을 작성해주세요."
+                this.errorMessage = "詳細内容 or DeadLineを作成してください。"
             }                
         },        
     }
