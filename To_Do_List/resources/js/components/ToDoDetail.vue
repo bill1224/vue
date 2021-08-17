@@ -1,6 +1,6 @@
 <template>
     <Header />
-    <div class="container w-3/5">
+    <div class="container w-3/5 mt-32">
         <div class="text-center fs-1 mb-4" @click="redirectToHome">To Do Detail</div>        
         <div class="grid grid-cols-6 gap-4 border-3 rounded-1 mb-2 p-4 w-full" :style="!mode ? backgroud : null">
             <div class="col-start-1 col-end-6" :class="{ Done : !mode }" :style="hiddenText">{{ toDo.title }}</div>
@@ -18,7 +18,7 @@
                 <div class="text-2xl font-black">Done !!</div>
             </div>           
         </div>
-        <div class="border border-3 border-primary rounded-1 mb-2 p-4" :class="{ Done : !mode }" :style="!mode ? backgroud : null">
+        <div class="border border-3 rounded-1 mb-2 p-4" :class="{ Done : !mode }" :style="!mode ? backgroud : null">
             <div class="col-8">{{ toDo.description !== null ? toDo.description : "詳細内容を書いてください。"}}</div>            
         </div>
         <div class="text-center">            

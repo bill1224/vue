@@ -2,7 +2,7 @@
     <div class="black-bg" v-if="modal_is_state">
         <div class="white-bg">
             <div>
-                <input class="border-4 border-pink-400 w-full p-2 mb-2" type="text" v-model="groupName" placeholder="作るため、グループ名を書いてください。">
+                <input class="border-4 border-pink-400 w-full p-2 mb-2" type="text" v-model="groupName" placeholder="グループ名を書いてください。">
             </div>
             <div class="text-center">
                 <button type="button" class="btn btn-primary mr-2" @click="createGroup">作り</button>
@@ -13,8 +13,8 @@
 
     <Header />
 
-    <div class="flex h-full">
-        <div class="w-1/5 border-r-2 border-solid border-gray-600">
+    <div class="flex h-full mt-16">
+        <div class="w-1/5 border-r-2 border-solid border-gray-600 px-2">
             <Navbar :group-arr="Groups" @get-category-number="getCategoryNumber" @show-modal="showModal"/>
         </div>
 
@@ -30,7 +30,7 @@
                     v-model="title" 
                     @keyup.enter="submit" 
                     placeholder="ToDoを書いてください。" 
-                    class="mb-4  border-4 border-pink-400 w-full p-2" 
+                    class="mb-4  border-4 border-pink-400 w-full p-2 text-black" 
                 >
             </div>
             
@@ -152,6 +152,7 @@ export default {
           }).then(res => {              
               this.modal_is_state = false;
               this.Groups.push(res.data.Group);
+              this.groupName = '';
           });
       },
 

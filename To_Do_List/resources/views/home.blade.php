@@ -1,5 +1,7 @@
 @extends('layout.main')
 
 @section('content')
-    <to-do-detail :to-do-id="{{ $id }}"/>
+    <div class="h-full bg-gray-700 text-white">
+        <to-do-detail :to-do-id="{{ $id }}"/>
+    </div>
 @endsection

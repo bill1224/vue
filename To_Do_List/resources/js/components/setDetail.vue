@@ -2,20 +2,20 @@
     <Header />
 
     <div class="container w-3/5">
-        <div class="text-center fs-1 mb-4">Set Detail</div>
+        <div class="text-center fs-1 my-4">Set Detail</div>
         <div class="mb-2 border border-2 border-blue-300">
-            <input type="text" class="w-full p-2" v-model="title">                  
+            <input type="text" class="w-full p-2 bg-gray-400" v-model="title">                  
         </div>
         <div class="mb-2 border border-2 border-blue-300">
             <div>
                 <textarea rows="15" placeholder="詳しく書いてください。" v-model="description"
-                    class="w-full p-2"></textarea>                    
+                    class="w-full bg-gray-400 p-2"></textarea>                    
             </div>
         </div>
         <div class="grid grid-cols-2 border border-2 border-blue-300 mb-2 p-2">
             <div class="col-start-2">
                 <label for="date" class="text-sm pl-20">Set Deadline</label>                
-                <input type="date" id="date" v-model="deadline" class="border border-1 border-dark ml-2">
+                <input type="date" id="date" v-model="deadline" class="border border-1 border-dark ml-2 bg-gray-400">
             </div>
         </div>
         <div class="text-red-900 font-black">

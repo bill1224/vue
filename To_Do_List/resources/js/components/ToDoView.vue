@@ -83,6 +83,6 @@ export default {
 <style scoped>
     .Done {
         text-decoration: line-through;
-        color: blue;       
+        color: gray;       
     }
 </style>
