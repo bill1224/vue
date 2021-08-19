@@ -30,7 +30,7 @@
                 <span class="mr-2">Set Pattern</span>
                 <span class="mr-4">
                     <input type="radio" name="pattern" value="daily" v-model="pattern">
-                    <label for="huey">毎日</label> 
+                    <label for="huey">毎日</label>
                 </span>
 
                 <span>
@@ -127,7 +127,7 @@ export default {
                     if(this.pattern === 'weekly') {
                         this.setPattern = this.day;
                     } else {
-                        this.setPattern = this.pattern;
+                        this.setPattern = "매일";
                     }
                 }
                                 

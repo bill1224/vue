@@ -15,7 +15,7 @@
 
     <div class="flex h-full mt-16">
         <div class="w-1/5 border-r-2 border-solid border-gray-600 px-2">
-            <Navbar :group-arr="Groups" @get-category-number="getCategoryNumber" @show-modal="showModal"/>
+            <Navbar :group-arr="Groups" @get-category-number="getCategoryNumber" @pattern-value="getPatternList" @show-modal="showModal"/>
         </div>
 
         <div class="w-4/5 flex flex-col px-16">
@@ -33,9 +33,9 @@
                     class="mb-4  border-4 border-pink-400 w-full p-2 text-black" 
                 >
             </div>
-            
+
             <template v-for="ToDo in NotCompleteToDoList" :key="ToDo.id" class="flex-1">
-                <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
+                <ToDoView :to-do="ToDo" :pattern-list="patternList" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
             </template>
 
             <div class="text-center mt-2">
@@ -68,11 +68,12 @@ export default {
             title: '',
             currentState: "0",
             Groups: [],
-            categoryNum: 1004,
+            categoryNum: "All",
             modal_is_state: false,
             groupName: '',
             getData: "getData",
             category: '',
+            patternList: [],
         }
     },
 
@@ -88,9 +89,9 @@ export default {
 
     computed: {
         NotCompleteToDoList() {            
-            if(this.categoryNum === 1004) {
+            if(this.categoryNum === "All") {
                 return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });                
-            } else if (this.categoryNum === 1141) {
+            } else if (this.categoryNum === "Important") {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
             } else {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === String(this.categoryNum) || todo.group === String(this.categoryNum) && todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
@@ -159,6 +160,16 @@ export default {
       showModal() {
           this.modal_is_state = true
       },
+
+      getPatternList(value) {
+          axios.get('api/pattern', {
+              params: {
+                  pattern: value
+              }
+          }).then(res => {
+              this.patternList = res.data.patternList;
+          });
+      }
     }
 }
 </script>
