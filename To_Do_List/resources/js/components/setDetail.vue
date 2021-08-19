@@ -13,8 +13,42 @@
             </div>
         </div>
         <div class="grid grid-cols-2 border border-2 border-blue-300 mb-2 p-2">
-            <div class="col-start-2">
-                <label for="date" class="text-sm pl-20">Set Deadline</label>                
+            <div>
+                <span class="mr-2">Set Schedule</span>
+                <span class="mr-4">
+                    <input type="radio" name="schedule" value="pattern" v-model="schedule">
+                    <label for="huey">Pattern</label> 
+                </span>
+
+                <span>
+                    <input type="radio" name="schedule" value="deadline" v-model="schedule">
+                    <label for="huey">Deadline</label> 
+                </span>
+            </div>
+
+            <div v-if="schedule === 'pattern'">
+                <span class="mr-2">Set Pattern</span>
+                <span class="mr-4">
+                    <input type="radio" name="pattern" value="daily" v-model="pattern">
+                    <label for="huey">毎日</label> 
+                </span>
+
+                <span>
+                    <input type="radio" name="pattern" value="weekly" v-model="pattern">
+                    <label for="huey">毎週</label> 
+                </span>
+                <div v-if="pattern === 'weekly'">
+                    <span class="mr-2">Set Day</span>
+                    <select name="" id="" class="bg-gray-400 text-white">
+                        <template v-for="(day, i) in week" :key="i">
+                            <option value="">{{ day }}</option>
+                        </template>
+                    </select>
+                </div>
+            </div>
+
+            <div v-if="schedule === 'deadline'">
+                <label for="date" class="text-sm">Set Deadline</label>                
                 <input type="date" id="date" v-model="deadline" class="border border-1 border-dark ml-2 bg-gray-400">
             </div>
         </div>
@@ -53,6 +87,9 @@ export default {
             deadline: '',        
             errorMessage: '',
             todoList: '',
+            schedule:'',
+            pattern:'',
+            week: ['일', '월', '화', '수', '목', '금', '토'],
         }
     },
 

@@ -10,6 +10,9 @@
         <!-- <span>{{ toDo.deadline !== null ? toDo.deadline : undefined_deadline }}</span> -->
         <div class="col-span-6 text-end p-2" @click="onClickToDetail(toDo.id)">{{ mode ? printDDay() : "Done"}}</div>
     </div>
+    <div>
+        {{ calculateDay() }}
+    </div>
 </template>
 
 <script>
@@ -26,12 +29,14 @@ export default {
         const today = dayjs().format("YYYY-MM-DD").split('-').map(str => Number(str));
         const deadline = dayjs().format(this.toDo.deadline).split('-').map(str => Number(str));
         
+        
         return {
             today: new Date(today[0], today[1], today[2]).getTime(),
             deadline: new Date(deadline[0], deadline[1], deadline[2]).getTime(),
             elapsedDay: '',
             IsImportant: this.toDo.important_is,
-            mode: true,            
+            mode: true,
+            day: '',          
             hiddenText: {
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -74,6 +79,13 @@ export default {
                 this.$emit('reGetList');
             })
         },
+
+        calculateDay() {
+            const week = ['일', '월', '화', '수', '목', '금', '토'];
+            const dayOfWeek = week[new Date(this.toDo.deadline).getDay()];
+
+            return this.day = dayOfWeek;
+        }
     },
 } 
 </script>
