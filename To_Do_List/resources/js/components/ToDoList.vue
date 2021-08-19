@@ -2,7 +2,7 @@
     <div class="black-bg" v-if="modal_is_state">
         <div class="white-bg">
             <div>
-                <input class="border-4 border-pink-400 w-full p-2 mb-2" type="text" v-model="groupName" placeholder="グループ名を書いてください。">
+                <input class="border-4 border-pink-400 bg-gray-400 w-full p-2 mb-2" type="text" v-model="groupName" placeholder="グループ名を書いてください。">
             </div>
             <div class="text-center">
                 <button type="button" class="btn btn-primary mr-2" @click="createGroup">作り</button>

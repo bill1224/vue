@@ -39,9 +39,9 @@
                 </span>
                 <div v-if="pattern === 'weekly'">
                     <span class="mr-2">Set Day</span>
-                    <select name="" id="" class="bg-gray-400 text-white">
+                    <select class="bg-gray-400 text-white" v-model="day">
                         <template v-for="(day, i) in week" :key="i">
-                            <option value="">{{ day }}</option>
+                            <option :value="day">{{ day }}</option>
                         </template>
                     </select>
                 </div>
@@ -89,6 +89,8 @@ export default {
             todoList: '',
             schedule:'',
             pattern:'',
+            setPattern:'',
+            day: '',
             week: ['일', '월', '화', '수', '목', '금', '토'],
         }
     },
@@ -109,7 +111,7 @@ export default {
 
     methods: {
         submit(id) {
-            if(this.description || this.deadline) {
+            if(this.description || this.deadline || this.pattern) {
                 if(this.deadline) {
                     const deadline = this.deadline.split('-').map(str => Number(str));
                     const deadlineSec = new Date(deadline[0], deadline[1], deadline[2]).getTime();                    
@@ -120,11 +122,20 @@ export default {
                         return;
                     }
                 }
+
+                if(this.pattern) {
+                    if(this.pattern === 'weekly') {
+                        this.setPattern = this.day;
+                    } else {
+                        this.setPattern = this.pattern;
+                    }
+                }
                                 
                 axios.post('../../api/todo/updateDetail', {
                     description: this.description,
                     deadline: this.deadline,
-                    id: id
+                    id: id,
+                    pattern: this.setPattern
                 }).then(res => {                    
                     console.log(res);
                 });
