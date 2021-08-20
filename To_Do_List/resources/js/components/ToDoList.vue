@@ -74,6 +74,7 @@ export default {
             getData: "getData",
             category: '',
             patternList: [],
+            pattern: '',
         }
     },
 
@@ -93,10 +94,12 @@ export default {
                 return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });                
             } else if (this.categoryNum === "Important") {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
+            } else if (this.patternList.length > 0) {
+                return this.patternList.filter(pattern => this.currentState === "all" && pattern.pattern === this.pattern || pattern.pattern === this.pattern && pattern.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
             } else {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === String(this.categoryNum) || todo.group === String(this.categoryNum) && todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
             }
-        }          
+        }
     },
 
     methods:{
@@ -167,6 +170,7 @@ export default {
                   pattern: value
               }
           }).then(res => {
+              this.pattern = value;
               this.patternList = res.data.patternList;
           });
       }
