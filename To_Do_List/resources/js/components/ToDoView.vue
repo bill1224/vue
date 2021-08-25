@@ -25,10 +25,6 @@ export default {
         toDo: {
             type:Object,            
         },
-
-        patternList: {
-            type:Object,
-        }
     },
 
     data(){

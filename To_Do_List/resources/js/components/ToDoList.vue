@@ -15,7 +15,7 @@
 
     <div class="flex h-full mt-16">
         <div class="w-1/5 border-r-2 border-solid border-gray-600 px-2">
-            <Navbar :group-arr="Groups" @get-category-number="getCategoryNumber" @pattern-value="getPatternList" @show-modal="showModal"/>
+            <Navbar :group-arr="Groups" @get-category-number="getCategoryNumber" @show-modal="showModal"/>
         </div>
 
         <div class="w-4/5 flex flex-col px-16">
@@ -35,7 +35,7 @@
             </div>
 
             <template v-for="ToDo in NotCompleteToDoList" :key="ToDo.id" class="flex-1">
-                <ToDoView :to-do="ToDo" :pattern-list="patternList" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
+                <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
             </template>
 
             <div class="text-center mt-2">
@@ -68,13 +68,13 @@ export default {
             title: '',
             currentState: "0",
             Groups: [],
-            categoryNum: "All",
+            categoryNum: 1004,
             modal_is_state: false,
             groupName: '',
             getData: "getData",
             category: '',
-            patternList: [],
-            pattern: '',
+            // patternList: [],
+            // pattern: '',
         }
     },
 
@@ -90,13 +90,15 @@ export default {
 
     computed: {
         NotCompleteToDoList() {            
-            if(this.categoryNum === "All") {
+            if(this.categoryNum === 1004) {
                 return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });                
-            } else if (this.categoryNum === "Important") {
+            } else if (this.categoryNum === 8080) {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
-            } else if (this.patternList.length > 0) {
-                return this.patternList.filter(pattern => this.currentState === "all" && pattern.pattern === this.pattern || pattern.pattern === this.pattern && pattern.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
-            } else {
+            } 
+            else if (this.categoryNum === "pattern") {
+                return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.category || pattern.pattern === this.category && pattern.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
+            }
+             else {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === String(this.categoryNum) || todo.group === String(this.categoryNum) && todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
             }
         }
@@ -164,16 +166,18 @@ export default {
           this.modal_is_state = true
       },
 
-      getPatternList(value) {
-          axios.get('api/pattern', {
-              params: {
-                  pattern: value
-              }
-          }).then(res => {
-              this.pattern = value;
-              this.patternList = res.data.patternList;
-          });
-      }
+    //   getPatternList(value) {
+    //       axios.get('api/pattern', {
+    //           params: {
+    //               pattern: value
+    //           }
+    //       }).then(res => {
+    //           this.categoryNum = 'pattern';
+    //           this.category = 'Pattern',
+    //           this.pattern = value;
+    //           this.ToDoList = res.data.patternList;
+    //       });
+    //   }
     }
 }
 </script>

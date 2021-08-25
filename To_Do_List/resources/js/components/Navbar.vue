@@ -1,15 +1,15 @@
 <template>
     <div>        
-        <div class="border-b-2 p-2" @click="changeCategory('All')" ref="getDataAll">全体</div>
-        <div class="border-b-2 p-2 p-2" @click="changeCategory('Important')" ref="getDataImportant">重要</div>
+        <div class="border-b-2 p-2" @click="changeCategory(1004)" ref="getData1004">全体</div>
+        <div class="border-b-2 p-2 p-2" @click="changeCategory(8080)" ref="getData8080">重要</div>
 
         <div class="form-floating border-b-2 py-2">
-            <select class="form-select bg-gray-400" id="floatingSelect" aria-label="Floating label select example" @change="changePattern(pattern)" v-model="pattern" @click="Emptyalert">
+            <select class="form-select bg-gray-400" id="floatingSelect2" aria-label="Floating label select example" @change="changeCategory(pattern)" v-model="pattern" @click="Emptyalert">
                 <template v-for="(value, i) in patternArr" :key="i">            
-                    <option :value="value" :ref="`getData${i}`">{{ value }}</option>
+                    <option :value="value" :ref="`getData${value}`">{{ value }}</option>
                 </template>                       
             </select>
-            <label for="floatingSelect" class="text-gray-600">Pattern</label>
+            <label for="floatingSelect2" class="text-gray-600">Pattern</label>
         </div>
 
         <div class="form-floating border-b-2 py-2">
@@ -40,15 +40,19 @@ export default {
     data() {
         return {     
             categoryNum: '',
-            test: '일본어',
-            pattern:'',
+            pattern: '',
             patternArr: ["매일",'일', '월', '화', '수', '목', '금', '토'],
         }
     },
 
     methods: {
         changeCategory(Num) {
-            const category = eval(`this.$refs.getData${Num}.innerHTML`);            
+            const category = eval(`this.$refs.getData${Num}.innerHTML`);   
+
+            if(typeof(Num) !== "number") {
+                Num = "pattern";
+            }
+            
             this.$emit("getCategoryNumber", Num, category);         
         },
 
@@ -63,9 +67,10 @@ export default {
             }
         },
 
-        changePattern(value) {
-            this.$emit("PatternValue", value); 
-        }
+        // changePattern(value) {
+        //     this.categoryNum = '';
+        //     this.$emit("PatternValue", value); 
+        // }
     },
 }
 </script>
