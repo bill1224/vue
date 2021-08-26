@@ -10,7 +10,7 @@
                 </li>
                 <li class="page-item" v-for="(num, i) in new Array(lastPage)" :key="i"><a class="page-link" href="#" @click="changePage(i + 1)">{{ i + 1 }}</a></li>
                 <li class="page-item">
-                <a class="page-link" href="?page=2">Next</a>
+                <a class="page-link" href="#">Next</a>
                 </li>
             </ul>
         </nav>
@@ -27,7 +27,7 @@ export default {
 
     watch: {
         currentPage( NewVal, OldVal ) {
-            console.log(`${OldVal} -> ${NewVal}`);
+            this.$emit('pageNumber', NewVal);
         }
     },
 

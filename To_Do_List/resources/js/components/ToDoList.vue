@@ -14,7 +14,7 @@
 
     <Header />
 
-    <div class="flex h-full mt-16">
+    <div class="flex h-full mt-16 bg-gray-700">
         <!-- Navbar Component -->
         <div class="w-1/5 border-r-2 border-solid border-gray-600 px-2">
             <Navbar :group-arr="Groups" @get-category-status="getcategoryStatus" @show-modal="showModal"/>
@@ -54,7 +54,7 @@
         </div>
 
         <div>
-            <pagination/>
+            <pagination @page-number="getPageNumber"/>
         </div>
     </div>
     
@@ -91,10 +91,8 @@ export default {
 
     created() {
         //페이지를 불러올 때, axios를 통해서 DB에서 ToDo Data를 초기화
-        axios.get('api/todo').then(res => {   
-            console.log(res);                     
-            this.ToDoList = res.data.list_arr.data;
-        });
+        this.getResult();
+
         //페이지를 불러올 때, axios를 통해서 DB에서 Group Data를 초기화
         axios.get('api/group').then(res => {
             this.Groups = res.data.Groups;            
@@ -195,6 +193,17 @@ export default {
       showModal() {
           this.modal_is_state = true
       },
+
+      getResult(pageNum = 1) {
+          axios.get('api/todo?page=' + pageNum).then(res => {   
+            console.log(res);                     
+            this.ToDoList = res.data.list_arr.data;
+        });
+      },
+
+      getPageNumber(pageNum) {
+          this.getResult(pageNum);
+      }
     }
 }
 </script>
