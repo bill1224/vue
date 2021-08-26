@@ -52,6 +52,10 @@
                 <button type="button" class="btn btn-primary" @click="changeState('all')">全体</button>      
             </div> 
         </div>
+
+        <div>
+            <pagination/>
+        </div>
     </div>
     
 
@@ -62,12 +66,14 @@
 import Header from "./Header.vue";
 import Navbar from "./Navbar.vue";
 import ToDoView from './ToDoView.vue';
+import pagination from './pagination.vue';
 
 export default {
     components: {
         ToDoView, //ToDO List를 보여주는 component
         Header, //Heeader component
-        Navbar //Nav component
+        Navbar, //Nav component
+        pagination,
     },
 
     data() {
@@ -85,8 +91,9 @@ export default {
 
     created() {
         //페이지를 불러올 때, axios를 통해서 DB에서 ToDo Data를 초기화
-        axios.get('api/todo').then(res => {                        
-                this.ToDoList = res.data.list_arr;
+        axios.get('api/todo').then(res => {   
+            console.log(res);                     
+            this.ToDoList = res.data.list_arr.data;
         });
         //페이지를 불러올 때, axios를 통해서 DB에서 Group Data를 초기화
         axios.get('api/group').then(res => {
