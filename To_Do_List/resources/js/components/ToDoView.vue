@@ -11,9 +11,6 @@
             <!-- <span>{{ toDo.deadline !== null ? toDo.deadline : undefined_deadline }}</span> -->
             <div class="col-span-6 text-end p-2" @click="onClickToDetail(toDo.id)">{{ mode ? printDDay() : "Done"}}</div>
         </div>
-        <!-- <div>
-            {{ calculateDay() }}
-        </div> -->
     </div>
 </template>
 
