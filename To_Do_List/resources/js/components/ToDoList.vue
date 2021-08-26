@@ -96,9 +96,13 @@ export default {
 
     computed: {
         NotCompleteToDoList() {
+            if(this.categoryStatus == 'All') {
+                return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState)
+                .sort(function (a, b) { return b.important_is - a.important_is });
+            }
             if(this.categoryStatus == 'important') {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
-            }  
+            } 
             // 패턴일 경우에는, categoryStatus 값이 patternArr값에 포함되어있을 때이므로, indexOf를 이용해서 Arr안에 존재하는지 검사를한다. (없으면, 값이 -1이기 때문에 0보다 클 때)
             else if(this.patternArr.indexOf(this.categoryStatus) >= 0) {
                 return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.categoryStatus || pattern.pattern === this.categoryStatus && pattern.completion_is === this.currentState)
