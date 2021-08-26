@@ -47,7 +47,7 @@ export default {
     },
 
     methods: {
-        changeCategory(Num) {
+        changeCategory(status) {
             // const category = eval(`this.$refs.getData${Num}.innerHTML`);   
 
             // if(typeof(Num) !== "number") {
@@ -56,7 +56,7 @@ export default {
 
             // console.log(Num, category);
             // this.$emit("getCategoryNumber", Num, category); 
-            this.$emit("getCategoryNumber", Num);         
+            this.$emit("getCategoryStatus", status);         
         },
 
         clickModal() {

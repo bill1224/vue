@@ -15,17 +15,17 @@
 
     <div class="flex h-full mt-16">
         <div class="w-1/5 border-r-2 border-solid border-gray-600 px-2">
-            <Navbar :group-arr="Groups" @get-category-number="getCategoryNumber" @show-modal="showModal"/>
+            <Navbar :group-arr="Groups" @get-category-status="getcategoryStatus" @show-modal="showModal"/>
         </div>
 
         <div class="w-4/5 flex flex-col px-16">
-            <div class="text-center mb-4"><span class="fs-1"> {{ categoryNum }} </span></div>
-            <!-- <div class="text-center mb-4"><span class="fs-1"> {{ category === '' ? "全体" : category }} </span></div> -->
-            <!-- <div v-if="currentState === '0'">해야할 일 : {{ NotCompleteToDoList.length }} </div>
+            <div class="text-center mb-4"><span class="fs-1"> {{ categoryStatus }} </span></div>
+            <div v-if="currentState === '0'">해야할 일 : {{ NotCompleteToDoList.length }} </div>
             <div v-else-if="currentState === '1'">완료한 일 : {{ NotCompleteToDoList.length }}</div>
-            <div v-else>전체 : {{ NotCompleteToDoList.length }}</div> -->
+            <div v-else>전체 : {{ NotCompleteToDoList.length }}</div>
 
-            <div class="flex-initial p-2">
+            <!-- important일 때와, pattern일 경우에는 따로 글을 그곳에서 작성하는 것이 아닌, 따로 별표시나, 상세설정에서 바꾸는 것이기 때문에 text form은 보이지 않도록한다.  -->
+            <div class="flex-initial mt-2" v-if="categoryStatus !== 'important' && patternArr.indexOf(this.categoryStatus) < 0">
                 <input 
                     type="text" 
                     v-model="title" 
@@ -69,12 +69,10 @@ export default {
             title: '',
             currentState: "0",
             Groups: [],
-            categoryNum: "All",
+            categoryStatus: "All",
             modal_is_state: false,
             groupName: '',
             patternArr: ["매일",'일', '월', '화', '수', '목', '금', '토'],
-            getData: "getData",
-            category: '',
         }
     },
 
@@ -90,44 +88,20 @@ export default {
 
     computed: {
         NotCompleteToDoList() {
-            if(this.categoryNum == 'important') {
+            if(this.categoryStatus == 'important') {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
-            }  else if(this.patternArr.indexOf(this.categoryNum) >= 0) {
-                return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.categoryNum || pattern.pattern === this.categoryNum && pattern.completion_is === this.currentState)
+            }  
+            // 패턴일 경우에는, categoryStatus 값이 patternArr값에 포함되어있을 때이므로, indexOf를 이용해서 Arr안에 존재하는지 검사를한다. (없으면, 값이 -1이기 때문에 0보다 클 때)
+            else if(this.patternArr.indexOf(this.categoryStatus) >= 0) {
+                return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.categoryStatus || pattern.pattern === this.categoryStatus && pattern.completion_is === this.currentState)
                 .sort(function (a, b) { return b.important_is - a.important_is });
-            } else {
-                return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === this.categoryNum || todo.group === this.categoryNum && todo.completion_is === this.currentState)
+            } 
+            // important일 경우와, pattern을 제외한 나머지 경우
+            else {
+                return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === this.categoryStatus || todo.group === this.categoryStatus && todo.completion_is === this.currentState)
                 .sort(function (a, b) { return b.important_is - a.important_is });
             }
         }
-
-        // NotCompleteToDoList() {            
-        //     if(this.categoryNum === 'All') {e
-        //         return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });                
-        //     } else if (this.categoryNum === 'important') {
-        //         return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
-        //     } 
-        //     else if (this.categoryNum === "pattern") {
-        //         return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.category || pattern.pattern === this.category && pattern.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
-        //     }
-        //      else {
-        //         return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === this.categoryNum || todo.group === this.categoryNum && todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
-        //     }
-        // }
-
-        // NotCompleteToDoList() {            
-        //     if(this.categoryNum === 1004) {
-        //         return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });                
-        //     } else if (this.categoryNum === 8080) {
-        //         return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
-        //     } 
-        //     else if (this.categoryNum === "pattern") {
-        //         return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.category || pattern.pattern === this.category && pattern.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
-        //     }
-        //      else {
-        //         return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === String(this.categoryNum) || todo.group === String(this.categoryNum) && todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
-        //     }
-        // }
     },
 
     methods:{
@@ -142,7 +116,7 @@ export default {
             } else {
                 axios.post('api/todo/title', {
                     title: this.title,
-                    group: this.categoryNum
+                    group: this.categoryStatus
                 }).then(res => {                                        
                     this.ToDoList.push(res.data.ToDoList);
                 });
@@ -166,14 +140,8 @@ export default {
           return;
       },
 
-    //   getCategoryNumber(num, category) {
-    //       this.categoryNum = num;
-    //       this.category = category;
-    //       this.currentState = "0";
-    //   },
-
-      getCategoryNumber(num) {
-          this.categoryNum = num;
+      getcategoryStatus(num) {
+          this.categoryStatus = num;
           this.currentState = "0";
       },
 

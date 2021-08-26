@@ -1,7 +1,7 @@
 <template>
     <div>
         <div                    
-            class="grid grid-cols-6 border-2 rounded hover:bg-gray-400 mb-1"     
+            class="grid grid-cols-6 border-2 rounded hover:bg-gray-400 my-2"     
         >
             <div class="col-span-5 p-2" :style="hiddenText" @click="onClickToDetail(toDo.id)" :class="{ Done : !mode }">{{ toDo.title }}</div>
             <div class="col-span-1 pl-20" >
@@ -62,7 +62,7 @@ export default {
             this.toDo.deadline !== null  ? `D - ${this.elapsedDay}` :  "時間を設定してください。";
             if ( this.toDo.deadline !== null ) {
                 if ( this.elapsedDay < 0 ) {
-                    return "Deadlineが、、もう過ぎました。";
+                    return "Deadlineがもう過ぎました。";
                 } else {
                     return `D - ${this.elapsedDay}`;
                 }
