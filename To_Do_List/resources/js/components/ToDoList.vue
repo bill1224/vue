@@ -19,7 +19,8 @@
         </div>
 
         <div class="w-4/5 flex flex-col px-16">
-            <div class="text-center mb-4"><span class="fs-1"> {{ category === '' ? "全体" : category }} </span></div>
+            <div class="text-center mb-4"><span class="fs-1"> {{ categoryNum }} </span></div>
+            <!-- <div class="text-center mb-4"><span class="fs-1"> {{ category === '' ? "全体" : category }} </span></div> -->
             <!-- <div v-if="currentState === '0'">해야할 일 : {{ NotCompleteToDoList.length }} </div>
             <div v-else-if="currentState === '1'">완료한 일 : {{ NotCompleteToDoList.length }}</div>
             <div v-else>전체 : {{ NotCompleteToDoList.length }}</div> -->
@@ -68,13 +69,12 @@ export default {
             title: '',
             currentState: "0",
             Groups: [],
-            categoryNum: 1004,
+            categoryNum: "All",
             modal_is_state: false,
             groupName: '',
+            patternArr: ["매일",'일', '월', '화', '수', '목', '금', '토'],
             getData: "getData",
             category: '',
-            // patternList: [],
-            // pattern: '',
         }
     },
 
@@ -89,19 +89,45 @@ export default {
     },
 
     computed: {
-        NotCompleteToDoList() {            
-            if(this.categoryNum === 1004) {
-                return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });                
-            } else if (this.categoryNum === 8080) {
+        NotCompleteToDoList() {
+            if(this.categoryNum == 'important') {
                 return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
-            } 
-            else if (this.categoryNum === "pattern") {
-                return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.category || pattern.pattern === this.category && pattern.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
-            }
-             else {
-                return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === String(this.categoryNum) || todo.group === String(this.categoryNum) && todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
+            }  else if(this.patternArr.indexOf(this.categoryNum) >= 0) {
+                return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.categoryNum || pattern.pattern === this.categoryNum && pattern.completion_is === this.currentState)
+                .sort(function (a, b) { return b.important_is - a.important_is });
+            } else {
+                return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === this.categoryNum || todo.group === this.categoryNum && todo.completion_is === this.currentState)
+                .sort(function (a, b) { return b.important_is - a.important_is });
             }
         }
+
+        // NotCompleteToDoList() {            
+        //     if(this.categoryNum === 'All') {e
+        //         return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });                
+        //     } else if (this.categoryNum === 'important') {
+        //         return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
+        //     } 
+        //     else if (this.categoryNum === "pattern") {
+        //         return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.category || pattern.pattern === this.category && pattern.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
+        //     }
+        //      else {
+        //         return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === this.categoryNum || todo.group === this.categoryNum && todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
+        //     }
+        // }
+
+        // NotCompleteToDoList() {            
+        //     if(this.categoryNum === 1004) {
+        //         return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });                
+        //     } else if (this.categoryNum === 8080) {
+        //         return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
+        //     } 
+        //     else if (this.categoryNum === "pattern") {
+        //         return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.category || pattern.pattern === this.category && pattern.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
+        //     }
+        //      else {
+        //         return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === String(this.categoryNum) || todo.group === String(this.categoryNum) && todo.completion_is === this.currentState).sort(function (a, b) { return b.important_is - a.important_is });
+        //     }
+        // }
     },
 
     methods:{
@@ -140,9 +166,14 @@ export default {
           return;
       },
 
-      getCategoryNumber(num, category) {
+    //   getCategoryNumber(num, category) {
+    //       this.categoryNum = num;
+    //       this.category = category;
+    //       this.currentState = "0";
+    //   },
+
+      getCategoryNumber(num) {
           this.categoryNum = num;
-          this.category = category;
           this.currentState = "0";
       },
 
@@ -165,19 +196,6 @@ export default {
       showModal() {
           this.modal_is_state = true
       },
-
-    //   getPatternList(value) {
-    //       axios.get('api/pattern', {
-    //           params: {
-    //               pattern: value
-    //           }
-    //       }).then(res => {
-    //           this.categoryNum = 'pattern';
-    //           this.category = 'Pattern',
-    //           this.pattern = value;
-    //           this.ToDoList = res.data.patternList;
-    //       });
-    //   }
     }
 }
 </script>
