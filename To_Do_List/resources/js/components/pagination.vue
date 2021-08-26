@@ -5,12 +5,12 @@
     <div>
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-end">
-                <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <li class="page-item" v-for="(num, i) in new Array(lastPage)" :key="i"><a class="page-link" href="#" @click="changePage(i + 1)">{{ i + 1 }}</a></li>
                 <li class="page-item">
-                <a class="page-link" href="#">Next</a>
+                    <a class="page-link" @click="changePage(ToDoList.current_page - 1)">Previous</a>
+                </li>
+                <li class="page-item" v-for="(num, i) in new Array(lastPage)" :key="i"><a class="page-link" @click="changePage(i + 1)">{{ i + 1 }}</a></li>
+                <li class="page-item">
+                    <a class="page-link" @click="changePage(ToDoList.current_page + 1)">Next</a>
                 </li>
             </ul>
         </nav>
@@ -55,7 +55,10 @@ export default {
 
     methods: {
         changePage(val) {
-            this.ToDoList.current_page = val;
+            if ( val <= 0 || val > this.lastPage ) {
+                return;
+            }
+            this.ToDoList.current_page = val;            
         }
     }
 }

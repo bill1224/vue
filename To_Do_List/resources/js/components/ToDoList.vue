@@ -45,16 +45,17 @@
                 <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
             </template>
 
+            <!-- Paginate -->
+            <div>
+                <pagination @page-number="getPageNumber"/>
+            </div>
+
             <!-- 해야할 일, 완료한 일, 전체의 상태를 변경할 수 있는 버튼 -->
             <div class="text-center mt-2">
                 <button type="button" class="btn btn-warning" @click="changeState('0')">進行</button>            
                 <button type="button" class="btn btn-primary mx-2" @click="changeState('1')">完了</button>      
                 <button type="button" class="btn btn-primary" @click="changeState('all')">全体</button>      
             </div> 
-        </div>
-
-        <div>
-            <pagination @page-number="getPageNumber"/>
         </div>
     </div>
     
@@ -172,9 +173,10 @@ export default {
 
       //ToDoView에서 중요표시를 눌렀을 때, emit을 통해서, 중요도순으로 다시 불러옴으로써 상위로 올라가도록 
       reGetList() {
-          axios.get('api/todo').then(res => {                            
-                this.ToDoList = res.data.list_arr;
-        });
+        //   axios.get('api/todo').then(res => {                            
+        //         this.ToDoList = res.data.list_arr;
+        // });
+        this.getResult();
       },
       
       //modal창에서 group생성할 때 실행되는 함수
