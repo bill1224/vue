@@ -29,7 +29,7 @@
             <div v-else>전체 : {{ NotCompleteToDoList.length }}</div> -->
 
             <!-- important일 때와, pattern일 경우에는 따로 글을 그곳에서 작성하는 것이 아닌, 따로 별표시나, 상세설정에서 바꾸는 것이기 때문에 text form은 보이지 않도록한다.  -->
-            <div class="flex-initial mt-2" v-if="categoryStatus !== 'important' && patternArr.indexOf(this.categoryStatus) < 0">
+            <div class="flex-initial mt-2" v-if="categoryStatus !== 'important' && patternArr.indexOf(this.categoryStatus) < 0 && currentState === 0">
                 <input 
                     type="text" 
                     v-model="title" 
@@ -90,6 +90,7 @@ export default {
             groupName: '', 
             patternArr: ["매일",'일', '월', '화', '수', '목', '금', '토'], //categoryStatus의 값과 비교해서, pattern에 해당되는지 확인하기 위함            
             pageList: '',
+            lastPage: '',
         }
     },
 
@@ -100,13 +101,13 @@ export default {
     },
 
     created() {
-        //페이지를 불러올 때, axios를 통해서 DB에서 ToDo Data를 초기화
-        this.getResult();
-
         //페이지를 불러올 때, axios를 통해서 DB에서 Group Data를 초기화
         axios.get('api/group').then(res => {
             this.Groups = res.data.Groups;            
-        });
+        });     
+
+        //페이지를 불러올 때, axios를 통해서 DB에서 ToDo Data를 초기화
+        this.getResult();
     },
 
     computed: {
@@ -146,10 +147,10 @@ export default {
             } else {
                 axios.post('api/todo/title', {
                     title: this.title,
-                    group: this.categoryStatus
-                }).then(res => {     
-                    console.log(res);               
-                    const lastPage = res.data.list_arr.last_page;
+                    group: this.categoryStatus,
+                    currentState: this.currentState
+                }).then(res => {                    
+                    const lastPage = res.data.list_arr.last_page;                    
                     this.getResult(lastPage);                
                     this.ToDoList.push(res.data.ToDoList);
                 });
@@ -215,7 +216,8 @@ export default {
               }
           }).then(res => {                       
             this.ToDoList = res.data.list_arr.data;
-            this.pageList = res.data.list_arr;            
+            this.pageList = res.data.list_arr;
+            this.lastPage = res.data.list_arr.last_page;     
         });
       },
 

@@ -4,7 +4,7 @@
         <div class="border-b-2 p-2 p-2" @click="changeCategory('important')" ref="getData8080">重要</div>
         <!-- 패턴 dropbox -->
         <div class="form-floating border-b-2 py-2">
-            <select class="form-select bg-gray-400" id="floatingSelect2" aria-label="Floating label select example" @change="changeCategory(pattern)" v-model="pattern" @click="Emptyalert">
+            <select class="form-select bg-gray-400" id="floatingSelect2" aria-label="Floating label select example" @change="changeCategory(pattern)" v-model="pattern">
                 <template v-for="(value, i) in patternArr" :key="i">            
                     <option :value="value" :ref="`getData${value}`">{{ value }}</option>
                 </template>                       
