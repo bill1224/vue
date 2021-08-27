@@ -97,7 +97,12 @@ export default {
     watch: {
         currentState(NewVal, OldVal) {
             this.getResult();
-        }
+        },
+
+        categoryStatus(NewVal, OldVal) {
+            console.log("??");
+            this.getResult(1, NewVal);
+        },
     },
 
     created() {
@@ -112,23 +117,21 @@ export default {
 
     computed: {
         NotCompleteToDoList() {
-            if(this.categoryStatus == 'All') {
-                return this.ToDoList.filter(todo => this.currentState === "all" || todo.completion_is === this.currentState)
-                .sort(function (a, b) { return b.important_is - a.important_is });
-            }
-            if(this.categoryStatus == 'important') {
-                return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
-            } 
-            // 패턴일 경우에는, categoryStatus 값이 patternArr값에 포함되어있을 때이므로, indexOf를 이용해서 Arr안에 존재하는지 검사를한다. (없으면, 값이 -1이기 때문에 0보다 클 때)
-            else if(this.patternArr.indexOf(this.categoryStatus) >= 0) {
-                return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.categoryStatus || pattern.pattern === this.categoryStatus && pattern.completion_is === this.currentState)
-                .sort(function (a, b) { return b.important_is - a.important_is });
-            } 
-            // important일 경우와, pattern을 제외한 나머지 경우
-            else {
-                return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === this.categoryStatus || todo.group === this.categoryStatus && todo.completion_is === this.currentState)
-                .sort(function (a, b) { return b.important_is - a.important_is });
-            }
+            return this.ToDoList;
+            // if(this.categoryStatus == 'important') {
+            //     return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
+            // } 
+            // // 패턴일 경우에는, categoryStatus 값이 patternArr값에 포함되어있을 때이므로, indexOf를 이용해서 Arr안에 존재하는지 검사를한다. (없으면, 값이 -1이기 때문에 0보다 클 때)
+            // else if(this.patternArr.indexOf(this.categoryStatus) >= 0) {
+            //     return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.categoryStatus || pattern.pattern === this.categoryStatus && pattern.completion_is === this.currentState)
+            //     .sort(function (a, b) { return b.important_is - a.important_is });
+            // } 
+            // // important일 경우와, pattern을 제외한 나머지 경우
+            // else {
+            //     this.getResultWithCategory();
+            //     // return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === this.categoryStatus || todo.group === this.categoryStatus && todo.completion_is === this.currentState)
+            //     // .sort(function (a, b) { return b.important_is - a.important_is });
+            // }
         }
     },
 
@@ -159,17 +162,6 @@ export default {
             this.title='';
       },
 
-      
-    //   complete(id) {
-    //       axios.get('api/todo/complete', {
-    //           params: {
-    //               ToDoId: id
-    //           }
-    //       }).then(res => {            
-    //             this.ToDoList = res.data.list_arr;             
-    //     });
-    //   },
-
       //해야할 일, 완료한 일, 전체의 버튼이 눌릴 때, 실행되는 함수
       //눌릴 때마다 해당 value값으로 변경
       changeState(value) {
@@ -186,9 +178,6 @@ export default {
 
       //ToDoView에서 중요표시를 눌렀을 때, emit을 통해서, 중요도순으로 다시 불러옴으로써 상위로 올라가도록 
       reGetList() {
-        //   axios.get('api/todo').then(res => {                            
-        //         this.ToDoList = res.data.list_arr;
-        // });
         this.getResult();
       },
       
@@ -209,10 +198,11 @@ export default {
           this.modal_is_state = true
       },
 
-      getResult(pageNum = 1) {
+      getResult(pageNum = 1, categoryStatus = "All") {
           axios.get('api/todo?page=' + pageNum, {
               params: {
-                  currentState: this.currentState
+                  currentState: this.currentState,
+                  categoryStatus: categoryStatus
               }
           }).then(res => {                       
             this.ToDoList = res.data.list_arr.data;
@@ -220,6 +210,18 @@ export default {
             this.lastPage = res.data.list_arr.last_page;     
         });
       },
+
+    //   getResultWithCategory(pageNum = 1) {
+    //       axios.get('api/todos?page=' + pageNum, {
+    //           params: {
+    //               categoryStatus: this.categoryStatus
+    //           }
+    //       }).then(res => {                       
+    //         this.ToDoList = res.data.list_arr.data;
+    //         this.pageList = res.data.list_arr;
+    //         this.lastPage = res.data.list_arr.last_page;     
+    //     });
+    //   },
 
       getPageNumber(pageNum) {
           this.getResult(pageNum);
