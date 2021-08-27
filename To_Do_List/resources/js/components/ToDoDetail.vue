@@ -23,7 +23,7 @@
         </div>
         <div class="text-center">            
             <button  v-if="mode" type="button" class="btn btn-warning mr-2" @click="complete(toDo.id)">完了</button>       
-            <button v-else type="button" class="btn btn-warning mr-2" @click="unComplete(toDo.id)">復旧</button>
+            <button v-else type="button" class="btn btn-warning mr-2" @click="complete(toDo.id)">復旧</button>
             <button type="button" class="btn btn-primary" @click="redirectToDateSet(toDo.id)">詳細設定</button>         
         </div>                                            
     </div>
@@ -67,7 +67,7 @@ export default {
             }
         }).then(res => {
             this.toDo = res.data.todo_detail;
-            this.mode = res.data.todo_detail.completion_is === "0" ? true : false;
+            this.mode = res.data.todo_detail.completion_is ? false : true;
             console.log(res);
         });
     },
@@ -86,23 +86,20 @@ export default {
               params: {
                   ToDoId: id
               }
-          }).then(res => {
-                console.log(res);
-                // this.ToDoList = res.data.list_arr;             
-        });
-        this.mode = false; 
+          });
+        this.mode = !this.mode; 
       },
 
-      unComplete(id) {
-          axios.get('../../api/todo/uncomplete', {
-              params: {
-                  ToDoId: id
-              }
-          }).then(res => {
-                console.log(res);                          
-        });
-        this.mode = true;     
-      },
+    //   unComplete(id) {
+    //       axios.get('../../api/todo/uncomplete', {
+    //           params: {
+    //               ToDoId: id
+    //           }
+    //       }).then(res => {
+    //             console.log(res);                          
+    //     });
+    //     this.mode = true;     
+    //   },
 
       redirectToHome() {
             window.location.href = '/';

@@ -1,16 +1,13 @@
 <template>
-    <!-- <div v-for="(num, i) in new Array(lastPage)" :key="i">
-        <button type="button" class="btn btn-warning"> {{ i }} </button>  
-    </div> -->
     <div>
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-end">
                 <li class="page-item">
-                    <a class="page-link" @click="changePage(ToDoList.current_page - 1)">Previous</a>
+                    <a class="page-link" @click="changePage(pageList.current_page - 1)">Previous</a>
                 </li>
                 <li class="page-item" v-for="(num, i) in new Array(lastPage)" :key="i"><a class="page-link" @click="changePage(i + 1)">{{ i + 1 }}</a></li>
                 <li class="page-item">
-                    <a class="page-link" @click="changePage(ToDoList.current_page + 1)">Next</a>
+                    <a class="page-link" @click="changePage(pageList.current_page + 1)">Next</a>
                 </li>
             </ul>
         </nav>
@@ -19,11 +16,13 @@
 
 <script>
 export default {
-    data() {
-        return {
-            ToDoList: [],
-        }
-    },
+    props: ['pageList'],
+
+    // data() {
+    //     return {
+    //         ToDoList: [],
+    //     }
+    // },
 
     watch: {
         currentPage( NewVal, OldVal ) {
@@ -31,24 +30,24 @@ export default {
         }
     },
 
-    created() {
-        //페이지를 불러올 때, axios를 통해서 DB에서 ToDo Data를 초기화
-        axios.get('api/todo').then(res => {   
-            console.log(res);                     
-            this.ToDoList = res.data.list_arr;
-        });
-    },
+    // created() {
+    //     //페이지를 불러올 때, axios를 통해서 DB에서 ToDo Data를 초기화
+    //     axios.get('api/todo').then(res => {   
+    //         console.log(res);                     
+    //         this.ToDoList = res.data.list_arr;
+    //     });
+    // },
 
     computed: {
         currentPage: {
             get() {
-                return this.ToDoList.current_page;
+                return this.pageList.current_page;
             }
         },
 
         lastPage: {
             get() {
-                return this.ToDoList.last_page;
+                return this.pageList.last_page;
             }
         }
     },
@@ -58,7 +57,7 @@ export default {
             if ( val <= 0 || val > this.lastPage ) {
                 return;
             }
-            this.ToDoList.current_page = val;            
+            this.pageList.current_page = val;            
         }
     }
 }

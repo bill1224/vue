@@ -24,9 +24,9 @@
             <!-- Nav에서 category가 변경될 때, categoryStatus값을 통해 바인딩받아서, Title에 해당하는 부분이 변경되도록 , 처음에는 All로 초기화되어 있음 -->
             <div class="text-center mb-4"><span class="fs-1"> {{ categoryStatus }} </span></div>
             <!-- 해야할 일, 완료한 일, 전체의 상태에 따라서, 몇 개의 ToDoList 값이 있는지를 보여주기 위함 -->
-            <div v-if="currentState === '0'">해야할 일 : {{ NotCompleteToDoList.length }} </div>
+            <!-- <div v-if="currentState === '0'">해야할 일 : {{ NotCompleteToDoList.length }} </div>
             <div v-else-if="currentState === '1'">완료한 일 : {{ NotCompleteToDoList.length }}</div>
-            <div v-else>전체 : {{ NotCompleteToDoList.length }}</div>
+            <div v-else>전체 : {{ NotCompleteToDoList.length }}</div> -->
 
             <!-- important일 때와, pattern일 경우에는 따로 글을 그곳에서 작성하는 것이 아닌, 따로 별표시나, 상세설정에서 바꾸는 것이기 때문에 text form은 보이지 않도록한다.  -->
             <div class="flex-initial mt-2" v-if="categoryStatus !== 'important' && patternArr.indexOf(this.categoryStatus) < 0">
@@ -41,19 +41,21 @@
 
             <!-- template v-for를 이용해서, DB에서 받아온 ToDoList를 computed에서 NotCompleteToDoList로 가공한뒤에 
             ToDoView 컴포넌트로 보냄  -->
-            <template v-for="ToDo in NotCompleteToDoList" :key="ToDo.id" class="flex-1">
-                <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
-            </template>
+            <div class="flex-none">
+                <template v-for="ToDo in NotCompleteToDoList" :key="ToDo.id">
+                    <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
+                </template>
+            </div>            
 
             <!-- Paginate -->
             <div>
-                <pagination @page-number="getPageNumber"/>
+                <pagination :page-list="pageList" @page-number="getPageNumber"/>
             </div>
 
             <!-- 해야할 일, 완료한 일, 전체의 상태를 변경할 수 있는 버튼 -->
             <div class="text-center mt-2">
-                <button type="button" class="btn btn-warning" @click="changeState('0')">進行</button>            
-                <button type="button" class="btn btn-primary mx-2" @click="changeState('1')">完了</button>      
+                <button type="button" class="btn btn-warning" @click="changeState(0)">進行</button>            
+                <button type="button" class="btn btn-primary mx-2" @click="changeState(1)">完了</button>      
                 <button type="button" class="btn btn-primary" @click="changeState('all')">全体</button>      
             </div> 
         </div>
@@ -81,12 +83,13 @@ export default {
         return {            
             ToDoList: [], // ToDo Data를 저장하기 위함
             title: '', // ToDo 생성할 때, text form 값과 v-model로 바인딩
-            currentState: "0", // 해야할 일, 완료한 일, 전체의 상태를 나타내기 위함
+            currentState: 0, // 해야할 일, 완료한 일, 전체의 상태를 나타내기 위함
             Groups: [], //그룹 목록을 저장하기 위함
             categoryStatus: "All", // Nav에서 category변경값을 저장하기 위함, 처음에는 All로 초기화
             modal_is_state: false, // 모달창을 상태를 위함
             groupName: '', 
-            patternArr: ["매일",'일', '월', '화', '수', '목', '금', '토'], //categoryStatus의 값과 비교해서, pattern에 해당되는지 확인하기 위함
+            patternArr: ["매일",'일', '월', '화', '수', '목', '금', '토'], //categoryStatus의 값과 비교해서, pattern에 해당되는지 확인하기 위함            
+            pageList: '',
         }
     },
 
@@ -138,7 +141,10 @@ export default {
                 axios.post('api/todo/title', {
                     title: this.title,
                     group: this.categoryStatus
-                }).then(res => {                                        
+                }).then(res => {     
+                    console.log(res);               
+                    const lastPage = res.data.list_arr.last_page;
+                    this.getResult(lastPage);                
                     this.ToDoList.push(res.data.ToDoList);
                 });
             }         
@@ -197,9 +203,9 @@ export default {
       },
 
       getResult(pageNum = 1) {
-          axios.get('api/todo?page=' + pageNum).then(res => {   
-            console.log(res);                     
+          axios.get('api/todo?page=' + pageNum).then(res => {                       
             this.ToDoList = res.data.list_arr.data;
+            this.pageList = res.data.list_arr;            
         });
       },
 

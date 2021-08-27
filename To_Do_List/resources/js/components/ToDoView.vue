@@ -47,7 +47,7 @@ export default {
     created() {
         const elapsedMSec = this.deadline - this.today;
         this.elapsedDay = elapsedMSec / 1000 / 60 / 60 / 24;
-        this.mode = this.toDo.completion_is === "0" ? true : false;
+        this.mode = this.toDo.completion_is ? false : true;
     },
 
     methods: {
