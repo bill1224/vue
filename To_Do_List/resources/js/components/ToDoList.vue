@@ -93,6 +93,12 @@ export default {
         }
     },
 
+    watch: {
+        currentState(NewVal, OldVal) {
+            this.getResult();
+        }
+    },
+
     created() {
         //페이지를 불러올 때, axios를 통해서 DB에서 ToDo Data를 초기화
         this.getResult();
@@ -174,7 +180,7 @@ export default {
       //category value를 받아옴 
       getcategoryStatus(num) {
           this.categoryStatus = num;
-          this.currentState = "0";
+          this.currentState = 0;
       },
 
       //ToDoView에서 중요표시를 눌렀을 때, emit을 통해서, 중요도순으로 다시 불러옴으로써 상위로 올라가도록 
@@ -203,7 +209,11 @@ export default {
       },
 
       getResult(pageNum = 1) {
-          axios.get('api/todo?page=' + pageNum).then(res => {                       
+          axios.get('api/todo?page=' + pageNum, {
+              params: {
+                  currentState: this.currentState
+              }
+          }).then(res => {                       
             this.ToDoList = res.data.list_arr.data;
             this.pageList = res.data.list_arr;            
         });
