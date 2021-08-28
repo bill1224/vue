@@ -178,7 +178,7 @@ export default {
 
       //ToDoView에서 중요표시를 눌렀을 때, emit을 통해서, 중요도순으로 다시 불러옴으로써 상위로 올라가도록 
       reGetList() {
-        this.getResult();
+        this.getResult(1, this.categoryStatus);
       },
       
       //modal창에서 group생성할 때 실행되는 함수
