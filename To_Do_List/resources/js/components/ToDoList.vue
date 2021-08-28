@@ -35,7 +35,8 @@
                     v-model="title" 
                     @keyup.enter="submit" 
                     placeholder="ToDoを書いてください。" 
-                    class="mb-4  border-4 border-pink-400 w-full p-2 text-black" 
+                    class="mb-4  border-4 border-pink-400 w-full p-2 text-black"
+                    autofocus
                 >
             </div>
 
@@ -99,8 +100,7 @@ export default {
             this.getResult();
         },
 
-        categoryStatus(NewVal, OldVal) {
-            console.log("??");
+        categoryStatus(NewVal, OldVal) {            
             this.getResult(1, NewVal);
         },
     },
@@ -154,7 +154,7 @@ export default {
                     currentState: this.currentState
                 }).then(res => {                    
                     const lastPage = res.data.list_arr.last_page;                    
-                    this.getResult(lastPage);                
+                    this.getResult(lastPage, this.categoryStatus);                
                     this.ToDoList.push(res.data.ToDoList);
                 });
             }         
@@ -224,7 +224,7 @@ export default {
     //   },
 
       getPageNumber(pageNum) {
-          this.getResult(pageNum);
+          this.getResult(pageNum, this.categoryStatus);
       }
     }
 }
