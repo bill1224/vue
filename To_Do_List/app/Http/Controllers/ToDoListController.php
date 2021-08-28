@@ -21,6 +21,10 @@ class ToDoListController extends Controller
                                         ['important_is', 1],
                                         ['completion_is', request('currentState')],
                                         ])->paginate(5);
+        } 
+
+        else if( in_array(request('categoryStatus'), ['매일','월','화','수','목','금','토','일'])) {
+            $list_arr = ToDoList::where('pattern', request('categoryStatus'))->paginate(5);
         }
         
         else{

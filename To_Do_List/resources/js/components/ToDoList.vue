@@ -171,8 +171,8 @@ export default {
 
       //ToDoNav에서 Catagory가 변경될 경우 emit을 통해 함수를 수행
       //category value를 받아옴 
-      getcategoryStatus(num) {
-          this.categoryStatus = num;
+      getcategoryStatus(val) {
+          this.categoryStatus = val;
           this.currentState = 0;
       },
 
