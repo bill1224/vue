@@ -57,7 +57,7 @@
             <div class="text-center mt-2">
                 <button type="button" class="btn btn-warning" @click="changeState(0)">進行</button>            
                 <button type="button" class="btn btn-primary mx-2" @click="changeState(1)">完了</button>      
-                <button type="button" class="btn btn-primary" @click="changeState('all')">全体</button>      
+                <!-- <button type="button" class="btn btn-primary" @click="changeState('all')">全体</button>       -->
             </div> 
         </div>
     </div>
@@ -97,7 +97,7 @@ export default {
 
     watch: {
         currentState(NewVal, OldVal) {
-            this.getResult();
+            this.getResult(1, this.categoryStatus);
         },
 
         categoryStatus(NewVal, OldVal) {            

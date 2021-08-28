@@ -8,7 +8,27 @@ use Illuminate\Http\Request;
 class ToDoListController extends Controller
 {
     public function index() {
-        $list_arr = ToDoList::get();
+        // if(request('currentState') == "all") {
+        //     $list_arr = ToDoList::where()->orderBy('important_is', 'DESC')->paginate(5);
+        // } 
+        
+        if(request('categoryStatus') == "All") {
+            $list_arr = ToDoList::where('completion_is', request('currentState'))->orderBy('important_is', 'DESC')->paginate(5);
+        } 
+        
+        else if(request('categoryStatus') == "important") {
+            $list_arr = ToDoList::where([
+                                        ['important_is', 1],
+                                        ['completion_is', request('currentState')],
+                                        ])->paginate(5);
+        }
+        
+        else{
+            $list_arr = ToDoList::where([
+                                    ['completion_is', request('currentState')],
+                                    ['group', request('categoryStatus')],
+                                    ])->orderBy('important_is', 'DESC')->paginate(5);
+        }                
         
         return response()->json([
             'list_arr' => $list_arr
@@ -22,34 +42,29 @@ class ToDoListController extends Controller
         ]);                   
         
         $ToDoList = ToDoList::create($validated);
-        $ToDoList = ToDoList::orderBy('id', 'DESC')->first();
+        
+        if(request('categoryStatus') == "All") {
+            $list_arr = ToDoList::where('completion_is', request('currentState'))->orderBy('important_is', 'DESC')->paginate(5);
+        } else {
+            $list_arr = ToDoList::where([
+                                    ['completion_is', request('currentState')],
+                                    ['group', request('group')],
+                                    ])->orderBy('important_is', 'DESC')->paginate(5);
+        }
+        
 
         return response()->json([
-            'ToDoList' => $ToDoList
+            'ToDoList' => $ToDoList,
+            'list_arr' => $list_arr
         ], 200);
     }
 
 
     public function complete() {        
         $ToDoList = ToDoList::find(request('ToDoId'));
-        $ToDoList->completion_is = "1";
+        $ToDoList->completion_is = !($ToDoList->completion_is);
         $ToDoList->save();
-
-        $list_arr = ToDoList::where('completion_is', "0")->get();
-        return response()->json([
-            'list_arr' => $list_arr
-        ], 200);
-    }
-
-    public function unComplete() { 
-        $ToDoList = ToDoList::find(request('ToDoId'));
-        $ToDoList->completion_is = "0";
-        $ToDoList->save();
-
-        $list_arr = ToDoList::where('completion_is', "0")->get();
-        return response()->json([
-            'list_arr' => $list_arr
-        ], 200);
+        return;
     }
 
     public function detail() {        
@@ -64,6 +79,7 @@ class ToDoListController extends Controller
         $ToDoList = ToDoList::find(request('id'));
         $ToDoList->description = request('description');
         $ToDoList->deadline = request('deadline');
+        $ToDoList->pattern = request('pattern');
         $ToDoList->save();
 
         $todo_detail = ToDoList::where('id', request('id'))->first();
@@ -81,5 +97,13 @@ class ToDoListController extends Controller
         return response()->json([
             'ToDoList' => $ToDoList
         ], 200);
+    }
+
+    public function pattern() {
+        $patternList = ToDoList::where('pattern', request('pattern'))->get();
+
+        return response()->json([
+            'patternList' => $patternList
+        ]);
     }
 }
