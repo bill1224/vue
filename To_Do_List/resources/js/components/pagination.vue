@@ -25,18 +25,11 @@ export default {
     // },
 
     watch: {
+        // 현재 선택된 페이지 번호를 부모 컴포넌트로 보내서, axios할 때, 가져오고 데이터의 페이지부분을 지정해준다. 
         currentPage( NewVal, OldVal ) {
             this.$emit('pageNumber', NewVal);
         }
     },
-
-    // created() {
-    //     //페이지를 불러올 때, axios를 통해서 DB에서 ToDo Data를 초기화
-    //     axios.get('api/todo').then(res => {   
-    //         console.log(res);                     
-    //         this.ToDoList = res.data.list_arr;
-    //     });
-    // },
 
     computed: {
         currentPage: {
@@ -54,6 +47,7 @@ export default {
 
     methods: {
         changePage(val) {
+            // next, Previous버튼을 눌렀을 때, 최소/최대 페이지를 넘었을 경우에는 아무런 동작 하지 않도록
             if ( val <= 0 || val > this.lastPage ) {
                 return;
             }

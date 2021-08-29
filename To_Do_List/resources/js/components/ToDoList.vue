@@ -1,15 +1,7 @@
 <template>    
     <!-- Modal Popup -->
-    <div class="black-bg" v-if="modal_is_state">
-        <div class="white-bg">
-            <div>
-                <input class="border-4 border-pink-400 bg-gray-400 w-full p-2 mb-2" type="text" v-model="groupName" placeholder="グループ名を書いてください。">
-            </div>
-            <div class="text-center">
-                <button type="button" class="btn btn-primary mr-2" @click="createGroup">作り</button>
-                <button type="button" class="btn btn-warning" @click="modal_is_state=false">閉める</button>
-            </div>        
-        </div>
+    <div class="black-bg" v-if="modal_is_state">>
+        <Modal @show-modal="showModal" @add-group="addGroup"/>
     </div>
 
     <Header />
@@ -24,9 +16,8 @@
             <!-- Nav에서 category가 변경될 때, categoryStatus값을 통해 바인딩받아서, Title에 해당하는 부분이 변경되도록 , 처음에는 All로 초기화되어 있음 -->
             <div class="text-center mb-4"><span class="fs-1"> {{ categoryStatus }} </span></div>
             <!-- 해야할 일, 완료한 일, 전체의 상태에 따라서, 몇 개의 ToDoList 값이 있는지를 보여주기 위함 -->
-            <!-- <div v-if="currentState === '0'">해야할 일 : {{ NotCompleteToDoList.length }} </div>
-            <div v-else-if="currentState === '1'">완료한 일 : {{ NotCompleteToDoList.length }}</div>
-            <div v-else>전체 : {{ NotCompleteToDoList.length }}</div> -->
+            <div v-if="currentState === 0">해야할 일 : {{ total }} </div>
+            <div v-else-if="currentState === 1">완료한 일 : {{ total }}</div>            
 
             <!-- important일 때와, pattern일 경우에는 따로 글을 그곳에서 작성하는 것이 아닌, 따로 별표시나, 상세설정에서 바꾸는 것이기 때문에 text form은 보이지 않도록한다.  -->
             <div class="flex-initial mt-2" v-if="categoryStatus !== 'important' && patternArr.indexOf(this.categoryStatus) < 0 && currentState === 0">
@@ -57,7 +48,7 @@
             <div class="text-center mt-2">
                 <button type="button" class="btn btn-warning" @click="changeState(0)">進行</button>            
                 <button type="button" class="btn btn-primary mx-2" @click="changeState(1)">完了</button>      
-                <!-- <button type="button" class="btn btn-primary" @click="changeState('all')">全体</button>       -->
+                <!-- <button type="button" class="btn btn-primary" @click="changeState('all')">全体</button> -->
             </div> 
         </div>
     </div>
@@ -71,13 +62,15 @@ import Header from "./Header.vue";
 import Navbar from "./Navbar.vue";
 import ToDoView from './ToDoView.vue';
 import pagination from './pagination.vue';
+import Modal from './Modal.vue';
 
 export default {
     components: {
         ToDoView, //ToDO List를 보여주는 component
         Header, //Heeader component
         Navbar, //Nav component
-        pagination,
+        pagination, //pagination Component
+        Modal,
     },
 
     data() {
@@ -90,7 +83,8 @@ export default {
             modal_is_state: false, // 모달창을 상태를 위함
             groupName: '', 
             patternArr: ["매일",'일', '월', '화', '수', '목', '금', '토'], //categoryStatus의 값과 비교해서, pattern에 해당되는지 확인하기 위함            
-            pageList: '',            
+            pageList: '', 
+            total: '',  // ToDo List 개수를 저장해서 알려주기 위함
         }
     },
 
@@ -113,26 +107,6 @@ export default {
         //페이지를 불러올 때, axios를 통해서 DB에서 ToDo Data를 초기화
         this.getResult();
     },
-
-    // computed: {
-    //     NotCompleteToDoList() {
-    //         return this.ToDoList;
-    //         // if(this.categoryStatus == 'important') {
-    //         //     return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
-    //         // } 
-    //         // // 패턴일 경우에는, categoryStatus 값이 patternArr값에 포함되어있을 때이므로, indexOf를 이용해서 Arr안에 존재하는지 검사를한다. (없으면, 값이 -1이기 때문에 0보다 클 때)
-    //         // else if(this.patternArr.indexOf(this.categoryStatus) >= 0) {
-    //         //     return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.categoryStatus || pattern.pattern === this.categoryStatus && pattern.completion_is === this.currentState)
-    //         //     .sort(function (a, b) { return b.important_is - a.important_is });
-    //         // } 
-    //         // // important일 경우와, pattern을 제외한 나머지 경우
-    //         // else {
-    //         //     this.getResultWithCategory();
-    //         //     // return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === this.categoryStatus || todo.group === this.categoryStatus && todo.completion_is === this.currentState)
-    //         //     // .sort(function (a, b) { return b.important_is - a.important_is });
-    //         // }
-    //     }
-    // },
 
     methods:{
       //ToDoView에서 해당  ToDo가 클릭될 때 emit을 통해 해당 함수를 실행
@@ -182,20 +156,15 @@ export default {
       },
       
       //modal창에서 group생성할 때 실행되는 함수
-      createGroup() {
-          axios.post('api/group/create', {
-              group_name: this.groupName
-          }).then(res => {              
-              this.modal_is_state = false;
-              this.Groups.push(res.data.Group);
-              this.groupName = '';
-          });
+      addGroup(group) {
+        this.Groups.push(group);
+
       },
 
       //ToDoNav에서 group생성을 누르면, emit을 통해서 해당 함수가 실행된다.
       //modal is status 값을 true로 변경시켜 v-if의 해당 태그가 보여지면서 모달창이 생기게됨
-      showModal() {
-          this.modal_is_state = true
+      showModal() {          
+          this.modal_is_state = !this.modal_is_state
       },
 
       getResult(pageNum = 1, categoryStatus = "All") {
@@ -207,21 +176,10 @@ export default {
           }).then(res => {                       
             this.ToDoList = res.data.list_arr.data;
             this.pageList = res.data.list_arr;
-            this.lastPage = res.data.list_arr.last_page;     
+            this.lastPage = res.data.list_arr.last_page;
+            this.total = res.data.list_arr.total; 
         });
       },
-
-    //   getResultWithCategory(pageNum = 1) {
-    //       axios.get('api/todos?page=' + pageNum, {
-    //           params: {
-    //               categoryStatus: this.categoryStatus
-    //           }
-    //       }).then(res => {                       
-    //         this.ToDoList = res.data.list_arr.data;
-    //         this.pageList = res.data.list_arr;
-    //         this.lastPage = res.data.list_arr.last_page;     
-    //     });
-    //   },
 
       getPageNumber(pageNum) {
           this.getResult(pageNum, this.categoryStatus);
