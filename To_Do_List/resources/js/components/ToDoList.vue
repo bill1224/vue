@@ -43,7 +43,7 @@
             <!-- template v-for를 이용해서, DB에서 받아온 ToDoList를 computed에서 NotCompleteToDoList로 가공한뒤에 
             ToDoView 컴포넌트로 보냄  -->
             <div class="flex-none">
-                <template v-for="ToDo in NotCompleteToDoList" :key="ToDo.id">
+                <template v-for="ToDo in ToDoList" :key="ToDo.id">
                     <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
                 </template>
             </div>            
@@ -90,8 +90,7 @@ export default {
             modal_is_state: false, // 모달창을 상태를 위함
             groupName: '', 
             patternArr: ["매일",'일', '월', '화', '수', '목', '금', '토'], //categoryStatus의 값과 비교해서, pattern에 해당되는지 확인하기 위함            
-            pageList: '',
-            lastPage: '',
+            pageList: '',            
         }
     },
 
@@ -104,7 +103,7 @@ export default {
             this.getResult(1, NewVal);
         },
     },
-
+    
     created() {
         //페이지를 불러올 때, axios를 통해서 DB에서 Group Data를 초기화
         axios.get('api/group').then(res => {
@@ -115,25 +114,25 @@ export default {
         this.getResult();
     },
 
-    computed: {
-        NotCompleteToDoList() {
-            return this.ToDoList;
-            // if(this.categoryStatus == 'important') {
-            //     return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
-            // } 
-            // // 패턴일 경우에는, categoryStatus 값이 patternArr값에 포함되어있을 때이므로, indexOf를 이용해서 Arr안에 존재하는지 검사를한다. (없으면, 값이 -1이기 때문에 0보다 클 때)
-            // else if(this.patternArr.indexOf(this.categoryStatus) >= 0) {
-            //     return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.categoryStatus || pattern.pattern === this.categoryStatus && pattern.completion_is === this.currentState)
-            //     .sort(function (a, b) { return b.important_is - a.important_is });
-            // } 
-            // // important일 경우와, pattern을 제외한 나머지 경우
-            // else {
-            //     this.getResultWithCategory();
-            //     // return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === this.categoryStatus || todo.group === this.categoryStatus && todo.completion_is === this.currentState)
-            //     // .sort(function (a, b) { return b.important_is - a.important_is });
-            // }
-        }
-    },
+    // computed: {
+    //     NotCompleteToDoList() {
+    //         return this.ToDoList;
+    //         // if(this.categoryStatus == 'important') {
+    //         //     return this.ToDoList.filter(todo => this.currentState === "all" && todo.important_is === 1 || todo.important_is === 1 && todo.completion_is === this.currentState );
+    //         // } 
+    //         // // 패턴일 경우에는, categoryStatus 값이 patternArr값에 포함되어있을 때이므로, indexOf를 이용해서 Arr안에 존재하는지 검사를한다. (없으면, 값이 -1이기 때문에 0보다 클 때)
+    //         // else if(this.patternArr.indexOf(this.categoryStatus) >= 0) {
+    //         //     return this.ToDoList.filter(pattern => this.currentState === "all" && pattern.pattern === this.categoryStatus || pattern.pattern === this.categoryStatus && pattern.completion_is === this.currentState)
+    //         //     .sort(function (a, b) { return b.important_is - a.important_is });
+    //         // } 
+    //         // // important일 경우와, pattern을 제외한 나머지 경우
+    //         // else {
+    //         //     this.getResultWithCategory();
+    //         //     // return this.ToDoList.filter(todo => this.currentState === "all" && todo.group === this.categoryStatus || todo.group === this.categoryStatus && todo.completion_is === this.currentState)
+    //         //     // .sort(function (a, b) { return b.important_is - a.important_is });
+    //         // }
+    //     }
+    // },
 
     methods:{
       //ToDoView에서 해당  ToDo가 클릭될 때 emit을 통해 해당 함수를 실행
@@ -153,6 +152,7 @@ export default {
                     group: this.categoryStatus,
                     currentState: this.currentState
                 }).then(res => {                    
+                    console.log(res);
                     const lastPage = res.data.list_arr.last_page;                    
                     this.getResult(lastPage, this.categoryStatus);                
                     this.ToDoList.push(res.data.ToDoList);
