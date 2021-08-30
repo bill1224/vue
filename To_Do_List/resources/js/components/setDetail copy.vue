@@ -1,6 +1,4 @@
 <template>
-    <Header />
-
     <div class="container w-3/5">
         <div class="text-center fs-1 my-4">Set Detail</div>
         <div class="mb-2 border border-2 border-blue-300">
@@ -52,61 +50,36 @@
                 <input type="date" id="date" v-model="deadline" class="border border-1 border-dark ml-2 bg-gray-400">
             </div>
         </div>
-        <div class="text-red-900 font-black">
-            {{ errorMessage }}
+        <div class="text-gray-500 font-black">
+            {{ errorMessage }} 
         </div>
         <div class="text-center">
-            <button type="button" class="btn btn-warning" @click="submit(toDoId)">設定</button>
+            <button type="button" class="btn btn-warning" @click="submit(toDo.id)">設定</button>
         </div>        
     </div>
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import Header from './Header.vue';
+import dayjs from 'dayjs';
 
 export default {
-    props: {
-        toDoId: {
-            type: Number,
-            required: true,
-        }
-    },
-
-    components: {
-        Header,
-    },
+    props: ['toDo'],
 
     data() {
         const today = dayjs().format("YYYY-MM-DD").split('-').map(str => Number(str));        
         return {
             today: new Date(today[0], today[1], today[2]).getTime(),            
             elapsedDay: '',
-            title: '',
-            description: '', 
-            deadline: '',        
-            errorMessage: '',
-            todoList: '',
+            title: this.toDo.title,
+            description: this.toDo.description, 
+            deadline: this.toDo.deadline,        
+            errorMessage: '',            
             schedule:'',
             pattern:'',
             setPattern:'',
             day: '',
             week: ['일', '월', '화', '수', '목', '금', '토'],
         }
-    },
-
-    created() {
-        axios.get('../../api/todo/Showdetail', {
-            params: {
-                id: this.toDoId
-            }
-        }).then(res => {            
-            this.todoList = res.data.todo_detail;
-            this.title = res.data.todo_detail.title;
-            this.description = res.data.todo_detail.description;
-            this.deadline = res.data.todo_detail.deadline;
-
-        })
     },
 
     methods: {
@@ -131,15 +104,14 @@ export default {
                     }
                 }
                                 
-                axios.post('../../api/todo/updateDetail', {
+                axios.post('api/todo/updateDetail', {
+                    title: this.title,
                     description: this.description,
                     deadline: this.deadline,
                     id: id,
                     pattern: this.setPattern
-                }).then(res => {                    
-                    console.log(res);
                 });
-                window.location.href = `/todo/detail/${id}`;
+                this.$emit('redirectBackDetail', this.toDo);                            
             } else {
                 this.errorMessage = "詳細内容 or DeadLineを作成してください。"
             }                

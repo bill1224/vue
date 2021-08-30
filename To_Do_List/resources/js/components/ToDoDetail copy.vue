@@ -1,5 +1,4 @@
 <template>
-    <Header />
     <div class="container w-3/5 mt-32">
         <div class="text-center fs-1 mb-4" @click="redirectToHome">To Do Detail</div>        
         <div class="grid grid-cols-6 gap-4 border-3 rounded-1 mb-2 p-4 w-full" :style="!mode ? backgroud : null">
@@ -24,31 +23,19 @@
         <div class="text-center">            
             <button  v-if="mode" type="button" class="btn btn-warning mr-2" @click="complete(toDo.id)">完了</button>       
             <button v-else type="button" class="btn btn-warning mr-2" @click="complete(toDo.id)">復旧</button>
-            <button type="button" class="btn btn-primary" @click="redirectToDateSet(toDo.id)">詳細設定</button>         
+            <button type="button" class="btn btn-primary" @click="redirectToDateSet(toDo)">詳細設定</button>       
         </div>                                            
     </div>
 </template>
 
 <script>
-import Header from './Header.vue';
-
 export default {
-    props: {
-        toDoId: {
-            type: Number,
-            required: true,
-        }
-    },
-
-    components: {
-        Header,
-    },
+    props: ['toDo'],
 
     data() {
         return {
-            id: this.toDoId,
-            toDo: [],
-            mode: true,                          
+            id: this.toDo.id,            
+            mode: this.toDo.completion_is ? false : true,                          
             hiddenText: {
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -60,21 +47,9 @@ export default {
         }
     },
 
-    created() {
-        axios.get('../../api/todo/Showdetail', {
-            params: {
-                id: this.id
-            }
-        }).then(res => {
-            this.toDo = res.data.todo_detail;
-            this.mode = res.data.todo_detail.completion_is ? false : true;
-            console.log(res);
-        });
-    },
-
     methods: {
-        redirectToDateSet(id) {
-            window.location.href = `/todo/setDetail/${id}`;
+        redirectToDateSet(data) {
+            this.$emit('ShowSetDetail', data)
         },
 
         checkDeadLine(deadline) {
@@ -82,24 +57,13 @@ export default {
         },
 
         complete(id) {
-          axios.get('../../api/todo/complete', {
+          axios.get('api/todo/complete', {
               params: {
                   ToDoId: id
               }
           });
         this.mode = !this.mode; 
       },
-
-    //   unComplete(id) {
-    //       axios.get('../../api/todo/uncomplete', {
-    //           params: {
-    //               ToDoId: id
-    //           }
-    //       }).then(res => {
-    //             console.log(res);                          
-    //     });
-    //     this.mode = true;     
-    //   },
 
       redirectToHome() {
             window.location.href = '/';

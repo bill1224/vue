@@ -82,6 +82,11 @@ class ToDoListController extends Controller
     }
 
     public function updateDetail() {
+        // $request->validate([
+        //     'description' => 'required',
+        //     'deadline' => 'required',
+        // ]);
+
         $ToDoList = ToDoList::find(request('id'));
         $ToDoList->title = request('title');
         $ToDoList->description = request('description');
@@ -91,7 +96,7 @@ class ToDoListController extends Controller
 
         $todo_detail = ToDoList::where('id', request('id'))->first();
 
-        return view('welcome');
+        return response();
     }
 
     public function important() {

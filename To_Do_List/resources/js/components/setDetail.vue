@@ -54,7 +54,7 @@
             {{ errorMessage }} 
         </div>
         <div class="text-center">
-            <button type="button" class="btn btn-warning" @click="submit(toDo.id)">設定</button>
+            <button type="button" class="btn btn-warning" @click="submit(toDoId)">設定</button>
         </div>        
     </div>
 </template>
@@ -63,16 +63,16 @@
 import dayjs from 'dayjs';
 
 export default {
-    props: ['toDo'],
+    props: ['toDoId'],
 
     data() {
         const today = dayjs().format("YYYY-MM-DD").split('-').map(str => Number(str));        
-        return {
+        return {        
             today: new Date(today[0], today[1], today[2]).getTime(),            
             elapsedDay: '',
-            title: this.toDo.title,
-            description: this.toDo.description, 
-            deadline: this.toDo.deadline,        
+            title: '',
+            description: '', 
+            deadline: '',        
             errorMessage: '',            
             schedule:'',
             pattern:'',
@@ -80,6 +80,18 @@ export default {
             day: '',
             week: ['일', '월', '화', '수', '목', '금', '토'],
         }
+    },
+
+    created() {
+        axios.get('api/todo/Showdetail', {
+            params: {
+                    id: this.toDoId                    
+                }
+        }).then(res => {            
+            this.title = res.data.todo_detail.title;
+            this.description = res.data.todo_detail.description; 
+            this.deadline = res.data.todo_detail.deadline; 
+        });
     },
 
     methods: {
@@ -110,10 +122,8 @@ export default {
                     deadline: this.deadline,
                     id: id,
                     pattern: this.setPattern
-                }).then(res => {                    
-                    console.log(res);
                 });
-                window.location.href = '/';
+                this.$emit('redirectBackDetail', this.toDoId);                            
             } else {
                 this.errorMessage = "詳細内容 or DeadLineを作成してください。"
             }                
