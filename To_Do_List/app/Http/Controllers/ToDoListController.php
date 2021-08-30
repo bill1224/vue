@@ -48,7 +48,7 @@ class ToDoListController extends Controller
         $ToDoList = ToDoList::create($validated);
         
         if(request('group') == "All") {
-            $list_arr = ToDoList::orderBy('important_is', 'DESC')->paginate(5);
+            $list_arr = ToDoList::where('completion_is', request('currentState'))->orderBy('important_is', 'DESC')->paginate(5);
         } else {
             $list_arr = ToDoList::where([
                                     ['completion_is', request('currentState')],
