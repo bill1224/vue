@@ -27,7 +27,7 @@
             <button type="button" class="btn btn-primary" @click="redirectToDateSet(toDo.id)">詳細設定</button>         
         </div>                                            
     </div>
-</template>
+</template> 
 
 <script>
 // import Header from './Header.vue';
@@ -61,7 +61,7 @@ export default {
     },
 
     created() {
-        axios.get('../../api/todo/Showdetail', {
+        axios.get('api/todo/Showdetail', {
             params: {
                 id: this.id
             }
@@ -74,7 +74,7 @@ export default {
 
     methods: {
         redirectToDateSet(id) {
-            window.location.href = `/todo/setDetail/${id}`;
+            this.$emit('ShowSetDetail', id)
         },
 
         checkDeadLine(deadline) {

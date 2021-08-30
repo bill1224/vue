@@ -1,4 +1,6 @@
 <template>
+    <Header />
+
     <div class="container w-3/5">
         <div class="text-center fs-1 my-4">Set Detail</div>
         <div class="mb-2 border border-2 border-blue-300">
@@ -60,13 +62,19 @@
 </template>
 
 <script>
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
+import Header from './Header.vue';
 
 export default {
     props: {
         toDoId: {
             type: Number,
+            required: true,
         }
+    },
+
+    components: {
+        Header,
     },
 
     data() {
@@ -131,7 +139,7 @@ export default {
                 }).then(res => {                    
                     console.log(res);
                 });
-                window.location.href = '/';
+                window.location.href = `/todo/detail/${id}`;
             } else {
                 this.errorMessage = "詳細内容 or DeadLineを作成してください。"
             }                

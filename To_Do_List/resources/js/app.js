@@ -7,7 +7,5 @@ import SetDetail from './components/SetDetail.vue';
 
 const app = createApp({});
 app.component('to-do-list', ToDoList)
-    .component('to-do-detail', ToDoDetail)
-    .component('set-detail', SetDetail)
     .mount('#app');
 

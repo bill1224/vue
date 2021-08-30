@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ToDoListController;
 
 /*
@@ -23,9 +24,18 @@ Route::get('/todo', [ToDoListController::class, 'index']);
 
 Route::get('/todo/Showdetail', [ToDoListController::class, 'detail']);
 
+Route::get('/todo/important', [ToDoListController::class, 'important']);
+
 Route::get('/todo/complete', [ToDoListController::class, 'complete']);
+
+Route::get('/todo/uncomplete', [ToDoListController::class, 'unComplete']);
 
 Route::post('/todo/title', [ToDoListController::class, 'store']);
 
 Route::post('/todo/updateDetail', [ToDoListController::class, 'updateDetail']);
 
+Route::get('/group', [GroupController::class, 'index']);
+
+Route::post('/group/create', [GroupController::class, 'store']);
+
+Route::get('/pattern', [ToDoListController::class, 'pattern']);

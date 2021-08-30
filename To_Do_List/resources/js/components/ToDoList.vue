@@ -54,20 +54,25 @@
             </div>
         </template>
 
+        <template v-else-if="showDetail">
+            <SetDetail :to-do-id="ToDoId" />
+        </template>
+
         <!-- To Do Detail 화면 -->
         <template v-else>
-            <ToDoDetail :to-do-id="ToDoId"/>
+            <ToDoDetail :to-do-id="ToDoId" @show-set-detail="ShowSetDetail"/>
         </template>
     </div>
 </template>
 
 <script>
-import Header from "./Header.vue";
-import Navbar from "./Navbar.vue";
-import ToDoView from './ToDoView.vue';
-import pagination from './pagination.vue';
-import Modal from './Modal.vue';
-import ToDoDetail from './ToDoDetail.vue';
+import Header from "./Header";
+import Navbar from "./Navbar";
+import ToDoView from './ToDoView';
+import pagination from './pagination';
+import Modal from './Modal';
+import ToDoDetail from './ToDoDetail';
+import SetDetail from './SetDetail';
 
 export default {
     components: {
@@ -75,8 +80,9 @@ export default {
         Header, //Heeader component
         Navbar, //Nav component
         pagination, //pagination Component
-        Modal,
+        Modal, 
         ToDoDetail,
+        SetDetail,
     },
 
     data() {
@@ -92,6 +98,7 @@ export default {
             pageList: '', 
             total: '',  // ToDo List 개수를 저장해서 알려주기 위함
             ToDoId: '',
+            showDetail: false,
         }
     },
 
@@ -171,6 +178,7 @@ export default {
             this.categoryStatus = val;
             this.currentState = 0;
             this.ToDoId = '';
+            this.showDetail = false;
         },
 
         //ToDoView에서 중요표시를 눌렀을 때, emit을 통해서, 중요도순으로 다시 불러옴으로써 상위로 올라가도록 
@@ -194,6 +202,10 @@ export default {
         // currentPage number을 받아와서 해당 페이지에 맞는 data를 가져오도록 
         getPageNumber(pageNum) {
             this.getResult(pageNum, this.categoryStatus);
+        },
+
+        ShowSetDetail() {
+            this.showDetail = true;
         }
     }
 }

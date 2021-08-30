@@ -90,9 +90,7 @@ class ToDoListController extends Controller
 
         $todo_detail = ToDoList::where('id', request('id'))->first();
 
-        return response()->view('home', [
-            'todo_detail' => $todo_detail
-        ], 200);
+        return view('welcome');
     }
 
     public function important() {
