@@ -13,7 +13,7 @@
         </div>
         
         <!-- 메인 화면 -->
-        <template v-if="ToDoId === ''">
+        <template v-if="ToDo === ''">
             <div class="w-4/5 flex flex-col px-16">
                 <!-- Nav에서 category가 변경될 때, categoryStatus값을 통해 바인딩받아서, Title에 해당하는 부분이 변경되도록 , 처음에는 All로 초기화되어 있음 -->
                 <div class="text-center mb-4"><span class="fs-1"> {{ categoryStatus }} </span></div>
@@ -37,7 +37,7 @@
                 ToDoView 컴포넌트로 보냄  -->
                 <div class="flex-none">
                     <template v-for="ToDo in ToDoList" :key="ToDo.id">
-                        <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
+                        <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect" @re-get-list="reGetList"/>                                  
                     </template>
                 </div>            
 
@@ -55,12 +55,12 @@
         </template>
 
         <template v-else-if="showDetail">
-            <SetDetail :to-do-id="ToDoId" />
+            <SetDetail :to-do="ToDo" />
         </template>
 
         <!-- To Do Detail 화면 -->
         <template v-else>
-            <ToDoDetail :to-do-id="ToDoId" @show-set-detail="ShowSetDetail"/>
+            <ToDoDetail :to-do="ToDo" @show-set-detail="ShowSetDetail"/>
         </template>
     </div>
 </template>
@@ -96,8 +96,8 @@ export default {
             groupName: '', 
             patternArr: ["매일",'일', '월', '화', '수', '목', '금', '토'], //categoryStatus의 값과 비교해서, pattern에 해당되는지 확인하기 위함            
             pageList: '', 
-            total: '',  // ToDo List 개수를 저장해서 알려주기 위함
-            ToDoId: '',
+            total: '',  // ToDo List 개수를 저장해서 알려주기 위함            
+            ToDo: '',
             showDetail: false,
         }
     },
@@ -140,8 +140,8 @@ export default {
 
         //ToDoView에서 해당  ToDo가 클릭될 때 emit을 통해 해당 함수를 실행
         // location을 통해서 해당 ToDo의 id값을 URL에 포함시켜 URL변경
-        onClickRedirect(id) {           
-            this.ToDoId = id;
+        onClickRedirect(data) {                       
+            this.ToDo = data;
         },
 
         //text form에서 @keyup.enter를 통해서 enter를 눌렀다가 땟을 경우 실행되는 함수
@@ -204,7 +204,8 @@ export default {
             this.getResult(pageNum, this.categoryStatus);
         },
 
-        ShowSetDetail() {
+        ShowSetDetail(data) {
+            this.ToDo = data;
             this.showDetail = true;
         }
     }

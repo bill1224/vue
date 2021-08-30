@@ -54,7 +54,7 @@
             {{ errorMessage }}
         </div>
         <div class="text-center">
-            <button type="button" class="btn btn-warning" @click="submit(toDoId)">設定</button>
+            <button type="button" class="btn btn-warning" @click="submit(toDo.id)">設定</button>
         </div>        
     </div>
 </template>
@@ -63,42 +63,23 @@
 import dayjs from 'dayjs';
 
 export default {
-    props: {
-        toDoId: {
-            type: Number,
-        }
-    },
+    props: ['toDo'],
 
     data() {
         const today = dayjs().format("YYYY-MM-DD").split('-').map(str => Number(str));        
         return {
             today: new Date(today[0], today[1], today[2]).getTime(),            
             elapsedDay: '',
-            title: '',
-            description: '', 
-            deadline: '',        
-            errorMessage: '',
-            todoList: '',
+            title: this.toDo.title,
+            description: this.toDo.description, 
+            deadline: this.toDo.deadline,        
+            errorMessage: '',            
             schedule:'',
             pattern:'',
             setPattern:'',
             day: '',
             week: ['일', '월', '화', '수', '목', '금', '토'],
         }
-    },
-
-    created() {
-        axios.get('../../api/todo/Showdetail', {
-            params: {
-                id: this.toDoId
-            }
-        }).then(res => {            
-            this.todoList = res.data.todo_detail;
-            this.title = res.data.todo_detail.title;
-            this.description = res.data.todo_detail.description;
-            this.deadline = res.data.todo_detail.deadline;
-
-        })
     },
 
     methods: {
@@ -123,7 +104,7 @@ export default {
                     }
                 }
                                 
-                axios.post('../../api/todo/updateDetail', {
+                axios.post('api/todo/updateDetail', {
                     description: this.description,
                     deadline: this.deadline,
                     id: id,
