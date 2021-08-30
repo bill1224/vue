@@ -11,53 +11,45 @@
         <div class="w-1/5 border-r-2 border-solid border-gray-600 px-2">
             <Navbar :group-arr="Groups" @get-category-status="getcategoryStatus" @show-modal="showModal"/>
         </div>
-        
-        <!-- 메인 화면 -->
-        <template v-if="ToDoId === ''">
-            <div class="w-4/5 flex flex-col px-16">
-                <!-- Nav에서 category가 변경될 때, categoryStatus값을 통해 바인딩받아서, Title에 해당하는 부분이 변경되도록 , 처음에는 All로 초기화되어 있음 -->
-                <div class="text-center mb-4"><span class="fs-1"> {{ categoryStatus }} </span></div>
-                <!-- 해야할 일, 완료한 일, 전체의 상태에 따라서, 몇 개의 ToDoList 값이 있는지를 보여주기 위함 -->
-                <div v-if="currentState === 0">해야할 일 : {{ total }} </div>
-                <div v-else-if="currentState === 1">완료한 일 : {{ total }}</div>            
 
-                <!-- important일 때와, pattern일 경우에는 따로 글을 그곳에서 작성하는 것이 아닌, 따로 별표시나, 상세설정에서 바꾸는 것이기 때문에 text form은 보이지 않도록한다.  -->
-                <div class="flex-initial mt-2" v-if="categoryStatus !== 'important' && patternArr.indexOf(this.categoryStatus) < 0 && currentState === 0">
-                    <input 
-                        type="text" 
-                        v-model="title" 
-                        @keyup.enter="submit" 
-                        placeholder="ToDoを書いてください。" 
-                        class="mb-4  border-4 border-pink-400 w-full p-2 text-black"
-                        autofocus
-                    >
-                </div>
+        <div class="w-4/5 flex flex-col px-16">
+            <!-- Nav에서 category가 변경될 때, categoryStatus값을 통해 바인딩받아서, Title에 해당하는 부분이 변경되도록 , 처음에는 All로 초기화되어 있음 -->
+            <div class="text-center mb-4"><span class="fs-1"> {{ categoryStatus }} </span></div>
+            <!-- 해야할 일, 완료한 일, 전체의 상태에 따라서, 몇 개의 ToDoList 값이 있는지를 보여주기 위함 -->
+            <div v-if="currentState === 0">해야할 일 : {{ total }} </div>
+            <div v-else-if="currentState === 1">완료한 일 : {{ total }}</div>            
 
-                <!-- template v-for를 이용해서, DB에서 받아온 ToDoList를 computed에서 NotCompleteToDoList로 가공한뒤에 
-                ToDoView 컴포넌트로 보냄  -->
-                <div class="flex-none">
-                    <template v-for="ToDo in ToDoList" :key="ToDo.id">
-                        <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
-                    </template>
-                </div>            
-
-                <!-- Paginate -->
-                <div>
-                    <pagination :page-list="pageList" @page-number="getPageNumber"/>
-                </div>
-
-                <!-- 해야할 일, 완료한 일, 전체의 상태를 변경할 수 있는 버튼 -->
-                <div class="text-center mt-2">
-                    <button type="button" class="btn btn-warning" @click="changeState(0)">進行</button>            
-                    <button type="button" class="btn btn-primary mx-2" @click="changeState(1)">完了</button>                      
-                </div> 
+            <!-- important일 때와, pattern일 경우에는 따로 글을 그곳에서 작성하는 것이 아닌, 따로 별표시나, 상세설정에서 바꾸는 것이기 때문에 text form은 보이지 않도록한다.  -->
+            <div class="flex-initial mt-2" v-if="categoryStatus !== 'important' && patternArr.indexOf(this.categoryStatus) < 0 && currentState === 0">
+                <input 
+                    type="text" 
+                    v-model="title" 
+                    @keyup.enter="submit" 
+                    placeholder="ToDoを書いてください。" 
+                    class="mb-4  border-4 border-pink-400 w-full p-2 text-black"
+                    autofocus
+                >
             </div>
-        </template>
 
-        <!-- To Do Detail 화면 -->
-        <template v-else>
-            <ToDoDetail :to-do-id="ToDoId"/>
-        </template>
+            <!-- template v-for를 이용해서, DB에서 받아온 ToDoList를 computed에서 NotCompleteToDoList로 가공한뒤에 
+            ToDoView 컴포넌트로 보냄  -->
+            <div class="flex-none">
+                <template v-for="ToDo in ToDoList" :key="ToDo.id">
+                    <ToDoView :to-do="ToDo" @onClickToDetail="onClickRedirect(ToDo.id)" @re-get-list="reGetList"/>                                  
+                </template>
+            </div>            
+
+            <!-- Paginate -->
+            <div>
+                <pagination :page-list="pageList" @page-number="getPageNumber"/>
+            </div>
+
+            <!-- 해야할 일, 완료한 일, 전체의 상태를 변경할 수 있는 버튼 -->
+            <div class="text-center mt-2">
+                <button type="button" class="btn btn-warning" @click="changeState(0)">進行</button>            
+                <button type="button" class="btn btn-primary mx-2" @click="changeState(1)">完了</button>                      
+            </div> 
+        </div>
     </div>
 </template>
 
@@ -67,7 +59,6 @@ import Navbar from "./Navbar.vue";
 import ToDoView from './ToDoView.vue';
 import pagination from './pagination.vue';
 import Modal from './Modal.vue';
-import ToDoDetail from './ToDoDetail.vue';
 
 export default {
     components: {
@@ -76,7 +67,6 @@ export default {
         Navbar, //Nav component
         pagination, //pagination Component
         Modal,
-        ToDoDetail,
     },
 
     data() {
@@ -91,7 +81,6 @@ export default {
             patternArr: ["매일",'일', '월', '화', '수', '목', '금', '토'], //categoryStatus의 값과 비교해서, pattern에 해당되는지 확인하기 위함            
             pageList: '', 
             total: '',  // ToDo List 개수를 저장해서 알려주기 위함
-            ToDoId: '',
         }
     },
 
@@ -134,7 +123,7 @@ export default {
         //ToDoView에서 해당  ToDo가 클릭될 때 emit을 통해 해당 함수를 실행
         // location을 통해서 해당 ToDo의 id값을 URL에 포함시켜 URL변경
         onClickRedirect(id) {           
-            this.ToDoId = id;
+            window.location.href = `/todo/detail/${id}`;
         },
 
         //text form에서 @keyup.enter를 통해서 enter를 눌렀다가 땟을 경우 실행되는 함수
@@ -170,7 +159,6 @@ export default {
         getcategoryStatus(val) {
             this.categoryStatus = val;
             this.currentState = 0;
-            this.ToDoId = '';
         },
 
         //ToDoView에서 중요표시를 눌렀을 때, emit을 통해서, 중요도순으로 다시 불러옴으로써 상위로 올라가도록 

@@ -1,5 +1,5 @@
 <template>
-    <!-- <Header /> -->
+    <Header />
     <div class="container w-3/5 mt-32">
         <div class="text-center fs-1 mb-4" @click="redirectToHome">To Do Detail</div>        
         <div class="grid grid-cols-6 gap-4 border-3 rounded-1 mb-2 p-4 w-full" :style="!mode ? backgroud : null">
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-// import Header from './Header.vue';
+import Header from './Header.vue';
 
 export default {
     props: {
@@ -40,9 +40,9 @@ export default {
         }
     },
 
-    // components: {
-    //     Header,
-    // },
+    components: {
+        Header,
+    },
 
     data() {
         return {
@@ -89,6 +89,17 @@ export default {
           });
         this.mode = !this.mode; 
       },
+
+    //   unComplete(id) {
+    //       axios.get('../../api/todo/uncomplete', {
+    //           params: {
+    //               ToDoId: id
+    //           }
+    //       }).then(res => {
+    //             console.log(res);                          
+    //     });
+    //     this.mode = true;     
+    //   },
 
       redirectToHome() {
             window.location.href = '/';
