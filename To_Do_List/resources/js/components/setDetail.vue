@@ -50,8 +50,8 @@
                 <input type="date" id="date" v-model="deadline" class="border border-1 border-dark ml-2 bg-gray-400">
             </div>
         </div>
-        <div class="text-red-900 font-black">
-            {{ errorMessage }}
+        <div class="text-gray-500 font-black">
+            {{ errorMessage }} 
         </div>
         <div class="text-center">
             <button type="button" class="btn btn-warning" @click="submit(toDo.id)">設定</button>
@@ -105,6 +105,7 @@ export default {
                 }
                                 
                 axios.post('api/todo/updateDetail', {
+                    title: this.title,
                     description: this.description,
                     deadline: this.deadline,
                     id: id,

@@ -23,7 +23,7 @@
         <div class="text-center">            
             <button  v-if="mode" type="button" class="btn btn-warning mr-2" @click="complete(toDo.id)">完了</button>       
             <button v-else type="button" class="btn btn-warning mr-2" @click="complete(toDo.id)">復旧</button>
-            <button type="button" class="btn btn-primary" @click="redirectToDateSet(toDo)">詳細設定</button>         
+            <button type="button" class="btn btn-primary" @click="redirectToDateSet(toDo)">詳細設定</button>       
         </div>                                            
     </div>
 </template>
@@ -46,18 +46,6 @@ export default {
             }      
         }
     },
-
-    // created() {
-    //     axios.get('api/todo/Showdetail', {
-    //         params: {
-    //             id: this.id
-    //         }
-    //     }).then(res => {
-    //         this.toDo = res.data.todo_detail;
-    //         this.mode = res.data.todo_detail.completion_is ? false : true;
-    //         console.log(res);
-    //     });
-    // },
 
     methods: {
         redirectToDateSet(data) {

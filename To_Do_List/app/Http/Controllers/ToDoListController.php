@@ -83,6 +83,7 @@ class ToDoListController extends Controller
 
     public function updateDetail() {
         $ToDoList = ToDoList::find(request('id'));
+        $ToDoList->title = request('title');
         $ToDoList->description = request('description');
         $ToDoList->deadline = request('deadline');
         $ToDoList->pattern = request('pattern');
