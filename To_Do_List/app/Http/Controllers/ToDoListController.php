@@ -9,10 +9,6 @@ use Illuminate\Validation\ValidationException;
 class ToDoListController extends Controller
 {
     public function index() {
-        // if(request('currentState') == "all") {
-        //     $list_arr = ToDoList::where()->orderBy('important_is', 'DESC')->paginate(5);
-        // } 
-        
         if(request('categoryStatus') == "All") {
             $list_arr = ToDoList::where('completion_is', request('currentState'))->orderBy('important_is', 'DESC')->orderBy('id', 'ASC')->paginate(5);
         } 
@@ -25,7 +21,7 @@ class ToDoListController extends Controller
         } 
 
         else if( in_array(request('categoryStatus'), ['매일','월','화','수','목','금','토','일'])) {
-            $list_arr = ToDoList::where('pattern', request('categoryStatus'))->paginate(5);
+            $list_arr = ToDoList::where('pattern', request('categoryStatus'))->where('completion_is', request('currentState'))->paginate(5);
         }
         
         else{
