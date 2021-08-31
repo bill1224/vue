@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ToDoList;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ToDoListController extends Controller
 {
@@ -81,12 +82,7 @@ class ToDoListController extends Controller
         ]);
     }
 
-    public function updateDetail() {
-        // $request->validate([
-        //     'description' => 'required',
-        //     'deadline' => 'required',
-        // ]);
-
+    public function updateDetail(Request $request) {
         $ToDoList = ToDoList::find(request('id'));
         $ToDoList->title = request('title');
         $ToDoList->description = request('description');

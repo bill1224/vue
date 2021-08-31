@@ -22,7 +22,7 @@
                 <div v-else-if="currentState === 1">완료한 일 : {{ total }}</div>            
 
                 <!-- important일 때와, pattern일 경우에는 따로 글을 그곳에서 작성하는 것이 아닌, 따로 별표시나, 상세설정에서 바꾸는 것이기 때문에 text form은 보이지 않도록한다.  -->
-                <div class="flex-initial mt-2" v-if="categoryStatus !== 'important' && patternArr.indexOf(this.categoryStatus) < 0 && currentState === 0">
+                <!-- <div class="flex-initial mt-2" v-if="categoryStatus !== 'important' && patternArr.indexOf(this.categoryStatus) < 0 && currentState === 0">
                     <input 
                         type="text" 
                         v-model="title" 
@@ -31,7 +31,8 @@
                         class="mb-4  border-4 border-pink-400 w-full p-2 text-black"
                         autofocus
                     >
-                </div>
+                </div> -->
+                <InputText :category-status="categoryStatus" :current-state="currentState" @get-result="submitText"/>
 
                 <!-- template v-for를 이용해서, DB에서 받아온 ToDoList를 computed에서 NotCompleteToDoList로 가공한뒤에 
                 ToDoView 컴포넌트로 보냄  -->
@@ -62,6 +63,10 @@
         <template v-else>
             <ToDoDetail :to-do-id="ToDoId" @show-set-detail="ShowSetDetail"/>
         </template>
+
+        <div>
+            {{ test }}dfsdfsd
+        </div>
     </div>
 </template>
 
@@ -73,8 +78,11 @@ import pagination from './pagination';
 import Modal from './Modal';
 import ToDoDetail from './ToDoDetail';
 import SetDetail from './SetDetail';
+import InputText from './InputText';
 
 export default {
+    props: ['test'], 
+
     components: {
         ToDoView, //ToDO List를 보여주는 component
         Header, //Heeader component
@@ -83,6 +91,7 @@ export default {
         Modal, 
         ToDoDetail,
         SetDetail,
+        InputText,
     },
 
     data() {
@@ -93,8 +102,7 @@ export default {
             Groups: [], //그룹 목록을 저장하기 위함
             categoryStatus: "All", // Nav에서 category변경값을 저장하기 위함, 처음에는 All로 초기화
             modal_is_state: false, // 모달창을 상태를 위함
-            groupName: '', 
-            patternArr: ["매일",'일', '월', '화', '수', '목', '금', '토'], //categoryStatus의 값과 비교해서, pattern에 해당되는지 확인하기 위함            
+            groupName: '',         
             pageList: '', 
             total: '',  // ToDo List 개수를 저장해서 알려주기 위함            
             ToDoId: '',
@@ -145,25 +153,8 @@ export default {
             this.showDetail = false;            
         },
 
-        //text form에서 @keyup.enter를 통해서 enter를 눌렀다가 땟을 경우 실행되는 함수
-        submit() { 
-            //if문을 쓴이유는 text가 있을 때만
-                if(this.title === '') {
-                    alert("글을 입력해야지!!");
-                } else {
-                    axios.post('api/todo/title', {
-                        title: this.title,
-                        group: this.categoryStatus,
-                        currentState: this.currentState
-                    }).then(res => {                    
-                        console.log(res);
-                        const lastPage = res.data.list_arr.last_page;                    
-                        this.getResult(lastPage, this.categoryStatus);                
-                        this.ToDoList.push(res.data.ToDoList);
-                    });
-                }         
-                //text를 저장하고 나서는 text창 초기화
-                this.title='';
+        submitText(lastPage, categoryStatus) {
+            this.getResult(lastPage, categoryStatus);
         },
 
         //해야할 일, 완료한 일, 전체의 버튼이 눌릴 때, 실행되는 함수
