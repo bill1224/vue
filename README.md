@@ -4,6 +4,7 @@
 내가 앞으로 사용하고 싶은 To Do를 만들어보자고 생각을 해서, 내가 원하는 기능들을 넣은 To Do를 만들게 되었습니다. 
 
 ## 전체적인 기능 
+
 모든 기능 설명을 블로그에 간편하게 볼 수 있도록 올려놨습니다.
 - 전체 흐름은 -> <a href="https://bill1224.tistory.com/312">나만의 To Do 리스트 만들기</a></br>
 
@@ -15,5 +16,6 @@
 - <a href="https://bill1224.tistory.com/320">Modal창을 이용한 그룹 생성</a></br>
 
 
-gif파일로 미리보는 To Do 프로젝트 
+## gif파일로 미리보는 To Do 프로젝트 
+
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/65009016/131626790-f08ab2c7-1124-471e-8f73-555417896646.gif)
